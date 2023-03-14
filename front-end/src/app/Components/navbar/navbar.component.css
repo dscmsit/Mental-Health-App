@@ -1,0 +1,22 @@
+.nav{
+    background-color: orange;
+    color:white; 
+    font:bolder; 
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: .5rem;
+    display: flex;
+}
+
+.nav-buttons{
+    margin-left:auto; 
+    display:inline; 
+}
+
+.button{
+    background: blue; 
+    color: white; 
+    padding: .2rem; 
+    margin: 0 .5rem;
+    border-radius: .25rem;
+
+}
