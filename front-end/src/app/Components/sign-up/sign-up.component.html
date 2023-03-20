@@ -1,32 +1,41 @@
-<div class="bg-gray-100 p-8 drop-shadow-2xl w-max rounded-lg mx-auto  flex flex-col justify-center">
-<h2 class="text-white font-bold p-2 text-center text-2xl">Sign Up</h2>
-<form class="flex flex-col">
-    <div class="bg-white p-4 ">
-    <label  class="m-1">First Name: </label>
-    <input class="border-2 m-1 border-black-900 "  placeholder="John" type="text"/><br/>
-    <label  class="m-1">Last Name: </label>
-    <input class="border-2 m-1 border-black-900 " placeholder="Doe" type="text"/><br>
-    <label  class="m-1">Email: </label>
-    <input class="border-2 m-1 border-black-900 " placeholder="johndoe@email.com" type="email"/><br/>
-    <label  class="m-1">Password: </label>
-    <input class="border-2 m-1 border-black-900 " placeholder="Enter a password" type="password"/><br/>
-    <label  class="m-1">Confirm Password: </label>
-    <input class="border-2 m-1 border-black-900 " placeholder="Confirm password" type="password"/><br/>
-    <label  class="m-1">DOB:</label>
-    <input class="border-2 m-1 border-black-900 " placeholder="Date of Birth" type="date"/><br/>
+<div class="p-8 mx-auto drop-shadow-2xl h-auto   w-96 border-4 bg-white rounded-lg">
+<h2 class="text-black font-bold p-2 text-center text-3xl">Sign Up</h2>
+<form class="flex flex-col text-lg">
+    <div class="bg-white p-4 flex flex-col">
+        
+    <label  class="m-1">First Name </label>
+    <input class="border-2 m-1 p-1 border-black-900 "  placeholder="John" type="text"/><br/>
+    <label  class="m-1">Last Name </label>
+    <input class="border-2 m-1 p-1 border-black-900 " placeholder="Doe" type="text"/><br>
+    <label  class="m-1">Email </label>
+    <input class="border-2 m-1 p-1 border-black-900 " placeholder="johndoe@email.com" type="email"/><br/>
+    <label  class="m-1">Password </label>
+    <input class="border-2 m-1 p-1 border-black-900 " placeholder="Enter a password" type="password"/><br/>
+    <label  class="m-1">Confirm Password </label>
+    <input class="border-2 m-1 p-1 border-black-900 " placeholder="Confirm password" type="password"/><br/>
+    <label  class="m-1">DOB</label>
+    <input class="border-2 m-1 p-1 border-black-900 " placeholder="Date of Birth" type="date"/><br/>
+  
     <label>Gender: </label>
-    <label for="Male"> Male</label>
-    <input type="radio" name="gender" id="Male"/>
-    <label for="Female"> Female</label>
-    <input type="radio" name="gender" id="Female"/>
-    <label for="Others"> Others</label>
-    <input type="radio" name="gender" id="Others"/>
+    <div>
+    <label class="mr-20" for="Male"> Male</label>
+    <input  type="radio" name="gender" id="Male"/>
+    </div>
 
+    <div>
+    <label class="mr-16" for="Female"> Female</label>
+    <input type="radio" name="gender" id="Female"/>
+</div>
+
+<div>
+    <label class="mr-16" for="Others"> Others</label>
+    <input type="radio" name="gender" id="Others"/>
+</div>
     
 </div>
 <button
 type="submit"
-class="text-green-400 bg-white w-4/5 mx-auto py-2 text-xl font-medium rounded m-2 hover:bg-green-400 hover:text-white"
+class="text-white border-2 bg-black w-64 mx-auto py-2 text-xl font-medium rounded m-2 hover:bg-white hover:text-black  hover:border-2 hover:border-black"
 >
 Submit
 </button>
