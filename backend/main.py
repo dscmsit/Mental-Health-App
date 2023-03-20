@@ -89,7 +89,7 @@ if __name__ == '__main__':
 #         return jsonify({"error": "All fields are required."}), 400
 #     users = read_csv('path/to/csv/file.csv')
 #     if any(user['username'] == data['username'] for user in users):
-#         return jsonify({"error": "Username already exists."}), 409
+#         return jsonify({"error": "Username already exists. Login instead"}), 409
 #     if data['password'] != data['confirm_password']:
 #         return jsonify({"error": "Passwords do not match."}), 400
 #     new_user = {'username': data['username'], 'email': data['email'], 'password': data['password']}
