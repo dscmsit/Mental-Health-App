@@ -1,35 +1,38 @@
 <div
-  class="p-8 mx-auto drop-shadow-2xl h-auto   w-96 border-4 bg-gray-100 rounded-lg"
+  class="p-8 mx-auto drop-shadow-2xl h-auto   w-96 border-4 bg-white rounded-lg"
 >
-  <h1 class="text-white font-bold p-2 text-center text-2xl">Sign In</h1>
+  <h1 class="text-black font-bold p-2 text-center text-3xl">Log in</h1>
 
-  <form class="flex flex-col">
-    <div class="bg-white border-amber-400 p-4 flex flex-col">
-      <div class="">
-        <label class="m-1">Email: </label>
+  <form class="flex flex-col text-lg ">
+    <div class="bg-white  p-4 flex flex-col">
+      <div class="flex flex-col">
+        <label class="m-1">Email </label>
         <input
-          class="border-2 m-1  border-black-900"
+          class="border-2 m-1 p-1 border-black-900"
           type="text"
           placeholder="johndoe@email.com"
         /><br />
       
       
-        <label class="m-1">Password: </label>
+        <label class="m-1">Password </label>
       <input
-        class="border-2 m-1 border-black-900 "
+        class="border-2 m-1 border-black-900 p-1"
         type="password"
         placeholder="Enter password"
       />
       </div>
     </div>
-    <button
+    <button 
       type="submit"
-      class="text-green-400 bg-white w-64 mx-auto py-2 text-xl font-medium rounded m-2 hover:bg-green-400 hover:text-white"
+      class="text-white bg-black w-64 mx-auto py-2 text-xl font-medium rounded m-2 hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black"
     >
       Submit
     </button>
   </form>
-  <p class="text-white text-center ">
-    Don't have an account? <a class="underline text-green-300" href="#">Sign Up</a>
+  <p class="text-black text-center ">
+    Don't have an account?
+  </p>
+  <p class="text-black text-center ">
+   <a class=" text-black" routerLink="sign-up"><u>Sign Up</u></a>
   </p>
 </div>
