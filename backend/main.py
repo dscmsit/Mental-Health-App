@@ -9,8 +9,6 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, World!'
 
-
-
 @app.route('/api_post', methods=['POST'])
 def process_json():
     data = request.get_json()
@@ -38,7 +36,7 @@ def login():
     else:
         return "user doesn't exist"
     
-
+@app.route("/")
 def update_data(username, email, password):
     fieldnames = ["username", "password", "email"]
 
@@ -52,7 +50,6 @@ def update_data(username, email, password):
         # write each dictionary as a row in the CSV
         for row in users:
             writer.writerow(row)
-
 
 users = []
 with open('backend/data.csv', 'r') as file:
@@ -80,21 +77,21 @@ if __name__ == '__main__':
 #         writer = csv.DictWriter(file, fieldnames=data.keys())
 #         writer.writerow(data)
 
-# @app.route('/api/register', methods=['POST'])
-# def register():
-#     data = request.json
-#     if not data:
-#         return jsonify({"error": "Invalid request."}), 400
-#     if 'username' not in data or 'email' not in data or 'password' not in data or 'confirm_password' not in data:
-#         return jsonify({"error": "All fields are required."}), 400
-#     users = read_csv('path/to/csv/file.csv')
-#     if any(user['username'] == data['username'] for user in users):
-#         return jsonify({"error": "Username already exists."}), 409
-#     if data['password'] != data['confirm_password']:
-#         return jsonify({"error": "Passwords do not match."}), 400
-#     new_user = {'username': data['username'], 'email': data['email'], 'password': data['password']}
-#     write_csv('path/to/csv/file.csv', new_user)
-#     return jsonify(new_user), 201
+@app.route('/api/register', methods=['POST'])
+def register():
+    data = request.json
+    if not data:
+        return jsonify({"error": "Invalid request."}), 400
+    if 'username' not in data or 'email' not in data or 'password' not in data or 'confirm_password' not in data:
+        return jsonify({"error": "All fields are required."}), 400
+    users = read_csv('path/to/csv/file.csv')
+    if any(user['username'] == data['username'] for user in users):
+        return jsonify({"error": "Username already exists."}), 409
+    if data['password'] != data['confirm_password']:
+        return jsonify({"error": "Passwords do not match."}), 400
+    new_user = {'username': data['username'], 'email': data['email'], 'password': data['password']}
+    write_csv('path/to/csv/file.csv', new_user)
+    return jsonify(new_user), 201
 
 
 # @app.route('/api/login', methods=['POST'])
