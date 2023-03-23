@@ -1,13 +1,16 @@
-from flask import Flask, request, jsonify
+import json
+from flask import Flask, Response, request, jsonify
 from scraper import fetch_req
-import csv
+import pymongo
+import hashlib
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
 
-@app.route("/api")
+@app.route("/")
 def hello_world():
-    return 'Hello, World!'
+    return 'welcome to mental api health'
 
 
 
@@ -27,92 +30,151 @@ def doctor():
         return "not working"
 
 
-@app.route("/login")
-def login():
-    data = request.get_json()
-    if users[data["email"]]:
-        if users[data["email"]] == data["pass"]:
-            return "Successfull"
-        else:
-            return "wrong password"
-    else:
-        return "user doesn't exist"
+try:
+    mongo=pymongo.MongoClient(host="localhost",port=27017, serverSelectionTimeoutMS=1000)
+    db=mongo.content
+    mongo.server_info()  #triggers exception if unable to connect to the database
+except:
+    print("ERROR-Cannot connect to the database")
+
+@app.route("/get_user",methods=["GET"])
+def get_users():
+    try:
+        print("wow")
+        data=list(db.users.find())
+        for d in data:
+            d["_id"]=str(d["_id"])
+
+        return Response(
+            response=json.dumps(data),
+            status=200,
+            mimetype="application/json"
+        )
+    except Exception as ex:
+        print(ex)
+        return Response(
+            response=json.dumps({"message":"cannot read user"}),
+            status=500,
+            mimetype="application/json"
+        )
+
+
+
+@app.route("/login",methods=["POST"])
+def login_user():
+    try:
+        # print("wow")
+        user={
+            "email":request.form["email"],
+            "password_rec": request.form["password"]
+        }
+        user["password_rec"]=getHashed(user["password_rec"])
+        if user["email"]=="" or user["password_rec"]=="":
+            return  Response(
+                    response=json.dumps({"message":"Enter the details correctly!!"}),
+                    status=400,
+                    mimetype="application/json"
+                )
+        
+        us=list(db.users.find())
+        # print(us)
+        for acc in us:
+            print(acc["email"])
+            if user["email"]==acc["email"] and user["password_rec"]==acc["password_hash"]:
+                return Response(
+                    response=json.dumps({"message":"User successfully logged in"}),
+                    status=200,
+                    mimetype="application/json"
+                )
+        return Response(
+            response=json.dumps({"message":"User does not exist, register instead"}),
+            status=401,
+            mimetype="application/json"
+        )
+                
+    except Exception as ex:
+        print(ex)
+        return Response(
+            response=json.dumps({"message":"cannot read user"}),
+            status=500,
+            mimetype="application/json"
+        )
     
 
-def update_data(username, email, password):
-    fieldnames = ["username", "password", "email"]
 
-    # open the CSV file in write mode
-    with open("output.csv", "w", newline="") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+def getHashed(text): #function to get hashed email/password as it is reapeatedly used
+    salt = "ITSASECRET" #salt for password security
+    hashed = text + salt #salting password
+    hashed = hashlib.md5(hashed.encode()) #encrypting with md5 hash
+    hashed = hashed.hexdigest() #converting to string
+    return hashed #give hashed text back
 
-        # write the header row with fieldnames
-        writer.writeheader()
+@app.route("/users",methods=["POST"])
+def create_user():
+    
+    try:       
+        # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
+        user={
+            "first name":request.form["first name"], 
+            "last name":request.form["last name"],
+            "email":request.form['email'],
+            "password_hash":request.form['password']
+        }
+        if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  : 
+            return Response(
+                response=json.dumps({"message":"Enter the details correctly!!"}),
+                status=400,
+                mimetype="application/json"
+            )
 
-        # write each dictionary as a row in the CSV
-        for row in users:
-            writer.writerow(row)
+        # user={
+        #     'firstname':'saanvi',
+        #     'lastname':'bhagat',
+        #     'age':20
+        # }
+        for us in db.users.find():
+            print(us['email'])
+            if us['email']==user["email"]:
+                return  Response(
+                    response=json.dumps({"message":"user already exists,login instead"}),
+                    status=401,
+                    mimetype="application/json"
+                )
+        user["password_hash"] =getHashed(user["password_hash"])
+        print(user["password_hash"])
+        dbResponse=db.users.insert_one(user)
+        return Response(
+            response=json.dumps({"message":"user registered", "id": f"{dbResponse.inserted_id}"}),
+            status=200,
+            mimetype="application/json"
+        )
+       
 
-
-users = []
-with open('backend/data.csv', 'r') as file:
-    reader = csv.reader(file)
-    for row in reader:
-        d={}
-        d["username"] = row[0]
-        d["password"] = row[1]
-        d["email"] = row[2]
-        users.append(d)
-
-print(users)
-
-if __name__ == '__main__':
-    app.run(debug=True) 
-
-
-# def read_csv(file_path):
-#     with open(file_path, 'r') as file:
-#         reader = csv.DictReader(file)
-#         return [dict(row) for row in reader]
-
-# def write_csv(file_path, data):
-#     with open(file_path, 'a', newline='') as file:
-#         writer = csv.DictWriter(file, fieldnames=data.keys())
-#         writer.writerow(data)
-
-# @app.route('/api/register', methods=['POST'])
-# def register():
-#     data = request.json
-#     if not data:
-#         return jsonify({"error": "Invalid request."}), 400
-#     if 'username' not in data or 'email' not in data or 'password' not in data or 'confirm_password' not in data:
-#         return jsonify({"error": "All fields are required."}), 400
-#     users = read_csv('path/to/csv/file.csv')
-#     if any(user['username'] == data['username'] for user in users):
-#         return jsonify({"error": "Username already exists. Login instead"}), 409
-#     if data['password'] != data['confirm_password']:
-#         return jsonify({"error": "Passwords do not match."}), 400
-#     new_user = {'username': data['username'], 'email': data['email'], 'password': data['password']}
-#     write_csv('path/to/csv/file.csv', new_user)
-#     return jsonify(new_user), 201
+    except Exception as ex:
+        print(ex)
 
 
-# @app.route('/api/login', methods=['POST'])
-# def login():
-#     data = request.json
-#     if not data:
-#         return jsonify({"error": "Invalid request."}), 400
-#     if 'username' not in data and 'email' not in data:
-#         return jsonify({"error": "Username or email is required."}), 400
-#     if 'password' not in data:
-#         return jsonify({"error": "Password is required."}), 400
-#     users = read_csv('path/to/csv/file.csv')
-#     if 'username' in data:
-#         user = next((user for user in users if user['username'] == data['username']), None)
-#     elif 'email' in data:
-#         user = next((user for user in users if user['email'] == data['email']), None)
-#     if not user:
-#         return jsonify({"error": "Invalid username or email."}), 401
-#     if user['password'] != data['password']:
-#         return jsonify({"error": "Invalid password."}), 401
-#     return jsonify(user), 200
+@app.route("/users/<id>",methods=["PUT"])
+def update_user(id):
+    try:
+        hashed=request.form["password"]
+        hashed=getHashed(hashed)
+        dbResponse=db.users.update_one(
+            {"_id":ObjectId(id)},
+            {"$set":{"password_hash":hashed}}
+        )
+        return Response(
+            response=json.dumps({"message":"user updated"}),
+            status=200,
+            mimetype="application/json"
+        )
+    except Exception as ex:
+        print(ex)
+        return Response(
+            response=json.dumps({"message":"cannot update user"}),
+            status=500,
+            mimetype="application/json"
+        )
+
+if __name__=='__main__':
+    app.run(debug=True)

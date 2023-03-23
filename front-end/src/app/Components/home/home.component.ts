@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+// import { NavbarComponent } from '../navbar/navbar.component';
+import { CardComponent } from '../card/card.component';
 
 @Component({
   selector: 'app-home',
