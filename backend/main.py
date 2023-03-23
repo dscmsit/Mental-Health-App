@@ -3,6 +3,7 @@ from flask import Flask, Response, request, jsonify
 from scraper import fetch_req
 import pymongo
 import bcrypt
+import hashlib
 
 app = Flask(__name__)
 
@@ -54,6 +55,7 @@ def login_user():
             "email":request.form["email"],
             "password_rec": request.form["password"]
         }
+        user["password_rec"]=getHashed(user["password_rec"])
         if user["email"]=="" or user["password_rec"]=="":
             return  Response(
                     response=json.dumps({"message":"Enter the details correctly!!"}),
@@ -84,21 +86,30 @@ def login_user():
             status=500,
             mimetype="application/json"
         )
+    
+
+
+def getHashed(text): #function to get hashed email/password as it is reapeatedly used
+    salt = "ITSASECRET" #salt for password security
+    hashed = text + salt #salting password
+    hashed = hashlib.md5(hashed.encode()) #encrypting with md5 hash
+    hashed = hashed.hexdigest() #converting to string
+    return hashed #give hashed text back
 
 @app.route("/users",methods=["POST"])
 def create_user():
     
     try:
+
         
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
         user={
             "first name":request.form["first name"], 
             "last name":request.form["last name"],
             "email":request.form['email'],
-            "password_hash":request.form['password'],
-            "confirm_pass":request.form['confirm password']
+            "password_hash":request.form['password']
         }
-        if user["password_hash"]=="" or user["confirm_pass"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]=="" or user["password_hash"]!=user["confirm_pass"] : 
+        if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  : 
             return  Response(
                     response=json.dumps({"message":"Enter the details correctly!!"}),
                     status=400,
@@ -118,7 +129,8 @@ def create_user():
                     status=401,
                     mimetype="application/json"
                 )
-          
+        user["password_hash"] =getHashed(user["password_hash"])
+        print(user["password_hash"])
         dbResponse=db.users.insert_one(user)
         return Response(
             response=json.dumps({"message":"user registered", "id": f"{dbResponse.inserted_id}"}),

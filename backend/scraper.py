@@ -76,4 +76,4 @@ def fetch_req(city):
     # except:
     return json.dumps(res)
 
-fetch_req("Chandigarh")
+print(fetch_req("Chandigarh"))
