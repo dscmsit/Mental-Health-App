@@ -2,8 +2,8 @@ import json
 from flask import Flask, Response, request, jsonify
 from scraper import fetch_req
 import pymongo
-import bcrypt
 import hashlib
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
@@ -42,8 +42,21 @@ def get_users():
     try:
         print("wow")
         data=list(db.users.find())
+        for d in data:
+            d["_id"]=str(d["_id"])
+
+        return Response(
+            response=json.dumps(data),
+            status=200,
+            mimetype="application/json"
+        )
     except Exception as ex:
         print(ex)
+        return Response(
+            response=json.dumps({"message":"cannot read user"}),
+            status=500,
+            mimetype="application/json"
+        )
 
 
 
@@ -99,9 +112,7 @@ def getHashed(text): #function to get hashed email/password as it is reapeatedly
 @app.route("/users",methods=["POST"])
 def create_user():
     
-    try:
-
-        
+    try:       
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
         user={
             "first name":request.form["first name"], 
@@ -110,11 +121,11 @@ def create_user():
             "password_hash":request.form['password']
         }
         if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  : 
-            return  Response(
-                    response=json.dumps({"message":"Enter the details correctly!!"}),
-                    status=400,
-                    mimetype="application/json"
-                )
+            return Response(
+                response=json.dumps({"message":"Enter the details correctly!!"}),
+                status=400,
+                mimetype="application/json"
+            )
 
         # user={
         #     'firstname':'saanvi',
@@ -141,6 +152,29 @@ def create_user():
 
     except Exception as ex:
         print(ex)
+
+
+@app.route("/users/<id>",methods=["PUT"])
+def update_user(id):
+    try:
+        hashed=request.form["password"]
+        hashed=getHashed(hashed)
+        dbResponse=db.users.update_one(
+            {"_id":ObjectId(id)},
+            {"$set":{"password_hash":hashed}}
+        )
+        return Response(
+            response=json.dumps({"message":"user updated"}),
+            status=200,
+            mimetype="application/json"
+        )
+    except Exception as ex:
+        print(ex)
+        return Response(
+            response=json.dumps({"message":"cannot update user"}),
+            status=500,
+            mimetype="application/json"
+        )
 
 if __name__=='__main__':
     app.run(debug=True)
