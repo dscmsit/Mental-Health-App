@@ -36,6 +36,55 @@ try:
 except:
     print("ERROR-Cannot connect to the database")
 
+@app.route("/get_user",methods=["GET"])
+def get_users():
+    try:
+        print("wow")
+        data=list(db.users.find())
+    except Exception as ex:
+        print(ex)
+
+
+
+@app.route("/login",methods=["POST"])
+def login_user():
+    try:
+        # print("wow")
+        user={
+            "email":request.form["email"],
+            "password_rec": request.form["password"]
+        }
+        if user["email"]=="" or user["password_rec"]=="":
+            return  Response(
+                    response=json.dumps({"message":"Enter the details correctly!!"}),
+                    status=400,
+                    mimetype="application/json"
+                )
+        
+        us=list(db.users.find())
+        # print(us)
+        for acc in us:
+            print(acc["email"])
+            if user["email"]==acc["email"] and user["password_rec"]==acc["password_hash"]:
+                return Response(
+                    response=json.dumps({"message":"User successfully logged in"}),
+                    status=200,
+                    mimetype="application/json"
+                )
+        return Response(
+            response=json.dumps({"message":"User does not exist, register instead"}),
+            status=401,
+            mimetype="application/json"
+        )
+                
+    except Exception as ex:
+        print(ex)
+        return Response(
+            response=json.dumps({"message":"cannot read user"}),
+            status=500,
+            mimetype="application/json"
+        )
+
 @app.route("/users",methods=["POST"])
 def create_user():
     
