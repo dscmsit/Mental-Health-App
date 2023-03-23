@@ -1,5 +1,4 @@
-from urllib.request import urlopen, Request
-import re, json
+
 
 '''
 Uttar-Pradesh
@@ -9,6 +8,7 @@ delhi
 def fetch_req(city):       
     result = {}
     # try:
+    import re, json
     import requests
     from bs4 import BeautifulSoup
 
