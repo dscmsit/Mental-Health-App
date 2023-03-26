@@ -10,6 +10,9 @@ import { HomeComponent } from './Components/home/home.component';
 import { UserFormComponent } from './Components/user-form/user-form.component';
 import { CardComponent } from './Components/card/card.component';
 
+import {HttpClientModule} from '@angular/common/http';
+import {freeApiService} from './services/freeapi.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,9 +27,11 @@ import { CardComponent } from './Components/card/card.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
   ],
-  providers: [],
+  providers: [freeApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
