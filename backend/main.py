@@ -4,9 +4,10 @@ from scraper import fetch_req
 import pymongo
 import hashlib
 from bson.objectid import ObjectId
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route("/")
 def hello_world():
@@ -29,7 +30,7 @@ def doctor():
     except:
         return "not working"
 
-
+# mongo db connection
 try:
     mongo=pymongo.MongoClient(host="localhost",port=27017, serverSelectionTimeoutMS=1000)
     db=mongo.content
@@ -37,6 +38,8 @@ try:
 except:
     print("ERROR-Cannot connect to the database")
 
+
+#get users api
 @app.route("/get_user",methods=["GET"])
 def get_users():
     try:
@@ -59,6 +62,7 @@ def get_users():
         )
 
 
+#login api
 
 @app.route("/login",methods=["POST"])
 def login_user():
@@ -102,6 +106,7 @@ def login_user():
         )
     
 
+# function for hashing password
 
 def getHashed(text): #function to get hashed email/password as it is reapeatedly used
     salt = "ITSASECRET" #salt for password security
@@ -110,6 +115,7 @@ def getHashed(text): #function to get hashed email/password as it is reapeatedly
     hashed = hashed.hexdigest() #converting to string
     return hashed #give hashed text back
 
+#function for registration
 @app.route("/users",methods=["POST"])
 def create_user():
     print("helloo")
@@ -121,7 +127,9 @@ def create_user():
             "first name":data['first name'], 
             "last name":data['last name'],
             "email":data['email'],
-            "password_hash":data['password']
+            "password_hash":data['password'],
+            "dob":data['dob'],
+            "gender":data['gender']
         }
         if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  : 
             return Response(
