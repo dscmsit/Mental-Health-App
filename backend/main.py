@@ -62,11 +62,12 @@ def get_users():
 
 @app.route("/login",methods=["POST"])
 def login_user():
+    data=request.json.get('data')
     try:
         # print("wow")
         user={
-            "email":request.form["email"],
-            "password_rec": request.form["password"]
+            "email":data['email'],
+            "password_rec": data["password"]
         }
         user["password_rec"]=getHashed(user["password_rec"])
         if user["email"]=="" or user["password_rec"]=="":
@@ -111,14 +112,16 @@ def getHashed(text): #function to get hashed email/password as it is reapeatedly
 
 @app.route("/users",methods=["POST"])
 def create_user():
-    
-    try:       
+    print("helloo")
+    try:      
+        data=request.json.get('data')
+        
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
         user={
-            "first name":request.form["first name"], 
-            "last name":request.form["last name"],
-            "email":request.form['email'],
-            "password_hash":request.form['password']
+            "first name":data['first name'], 
+            "last name":data['last name'],
+            "email":data['email'],
+            "password_hash":data['password']
         }
         if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  : 
             return Response(
@@ -152,12 +155,14 @@ def create_user():
 
     except Exception as ex:
         print(ex)
+        return "chal jaa saale"
 
 
 @app.route("/users/<id>",methods=["PUT"])
 def update_user(id):
+    data=request.json.get('data')
     try:
-        hashed=request.form["password"]
+        hashed=data["password"]
         hashed=getHashed(hashed)
         dbResponse=db.users.update_one(
             {"_id":ObjectId(id)},
