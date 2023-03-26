@@ -155,7 +155,7 @@ def create_user():
 
     except Exception as ex:
         print(ex)
-        return "chal jaa saale"
+        
 
 
 @app.route("/users/<id>",methods=["PUT"])
