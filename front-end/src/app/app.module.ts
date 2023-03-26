@@ -11,7 +11,7 @@ import { UserFormComponent } from './Components/user-form/user-form.component';
 import { CardComponent } from './Components/card/card.component';
 
 import {HttpClientModule} from '@angular/common/http';
-import {freeApiService} from './services/freeapi.service';
+
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -31,7 +31,7 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     FormsModule,
   ],
-  providers: [freeApiService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
