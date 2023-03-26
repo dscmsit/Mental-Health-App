@@ -1,14 +1,32 @@
 <div class="flex flex-col justify-center items-center">
-    <img src="https://contenthub-static.grammarly.com/blog/wp-content/uploads/2020/04/How-Writing-Can-Help-Support-Your-Mental-Health.jpg" 
-    class="h-96 w-screen" alt="Big Image"/>
+  <div class="relative shadow-xl flex justify-center items-center mb-10">
+    <img
+      src="https://contenthub-static.grammarly.com/blog/wp-content/uploads/2020/04/How-Writing-Can-Help-Support-Your-Mental-Health.jpg"
+      class="w-screen h-[50vh] object-cover"
+      alt="Big Image"
+    />
+    <div class="absolute flex flex-col justify-center items-center">
+      <h1 class="text-8xl text-center font-bold text-black font-sans">
+        Test Your Mental Health <br />
+        using AI
+      </h1>
+      <button
+        class="bg-black text-white w-1/5 text-lg py-3 px-2 rounded-xl m-1 shadow-2xl hover:border-black hover:bg-white hover:text-black mt-12 justify-center transition-all ease-in-out"
+      >
+        <a routerLink="user-form">Get Started</a>
+      </button>
+    </div>
+  </div>
 
-    <button class="bg-black text-white text-lg py-1 px-3 m-1 rounded hover:border-2 border-2 hover:border-black
-     hover:bg-white hover:text-black mt-12 w-2/3 justify-center"><a routerLink="user-form">Get Started</a></button>
-    
-     <h1 class="text-4xl font-bold mt-8 mx-2">Featured Posts</h1>
+  <div class="flex flex-col justify-center items-center">
+    <h1 class="text-4xl font-bold mt-8 mx-2">Featured Posts</h1>
 
-     <div class="">
-     </div>
-    
-    
+    <div class="flex flex-col justify-center items-center w-4/5 my-10 gap-8">
+      <app-card></app-card>
+      <app-card></app-card>
+      <app-card></app-card>
+      <app-card></app-card>
+      <app-card></app-card>
+    </div>
+  </div>
 </div>
