@@ -80,9 +80,7 @@ def doctor():
     except:
         return "not working"
 
-
-
-# _______________________________ USER AUTHENTCATION ROUTES _____________
+# mongo db connection
 try:
     mongo=pymongo.MongoClient(host="localhost",port=27017, serverSelectionTimeoutMS=1000)
     db=mongo.content
@@ -90,6 +88,8 @@ try:
 except:
     print("ERROR-Cannot connect to the database")
 
+
+#get users api
 @app.route("/get_user",methods=["GET"])
 def get_users():
     try:
@@ -112,14 +112,16 @@ def get_users():
         )
 
 
+#login api
 
 @app.route("/login",methods=["POST"])
 def login_user():
+    data=request.json.get('data')
     try:
         # print("wow")
         user={
-            "email":request.form["email"],
-            "password_rec": request.form["password"]
+            "email":data['email'],
+            "password_rec": data["password"]
         }
         user["password_rec"]=getHashed(user["password_rec"])
         if user["email"]=="" or user["password_rec"]=="":
@@ -154,6 +156,7 @@ def login_user():
         )
 
 
+# function for hashing password
 
 def getHashed(text): #function to get hashed email/password as it is reapeatedly used
     salt = "ITSASECRET" #salt for password security
@@ -162,17 +165,21 @@ def getHashed(text): #function to get hashed email/password as it is reapeatedly
     hashed = hashed.hexdigest() #converting to string
     return hashed #give hashed text back
 
-
+#function for registration
 @app.route("/users",methods=["POST"])
 def create_user():
-    data=request.json.get('data')
-    try:       
+    print("helloo")
+    try:      
+        data=request.json.get('data')
+        
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
         user={
             "first name":data['first name'], 
             "last name":data['last name'],
             "email":data['email'],
-            "password_hash":data['password']
+            "password_hash":data['password'],
+            "dob":data['dob'],
+            "gender":data['gender']
         }
         if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  :
             return Response(
@@ -206,12 +213,14 @@ def create_user():
 
     except Exception as ex:
         print(ex)
+        
 
 
 @app.route("/users/<id>",methods=["PUT"])
 def update_user(id):
+    data=request.json.get('data')
     try:
-        hashed=request.form["password"]
+        hashed=data["password"]
         hashed=getHashed(hashed)
         dbResponse=db.users.update_one(
             {"_id":ObjectId(id)},
