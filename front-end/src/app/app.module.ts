@@ -15,6 +15,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { DoctorCardComponent } from './Components/doctor-card/doctor-card.component';
+import { ResultComponent } from './Components/result/result.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { DoctorCardComponent } from './Components/doctor-card/doctor-card.compon
     CardComponent,
     ProfileComponent,
     DoctorCardComponent,
+    ResultComponent,
    
   ],
   imports: [
