@@ -1,18 +1,21 @@
-import json
 from flask import Flask, Response, request, jsonify
 from scraper import fetch_req
+import numpy as np
+import tensorflow as tf      # remove if not necessary
+import json
 import pymongo
 import hashlib
 from bson.objectid import ObjectId
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route("/")
 def hello_world():
     return 'welcome to mental api health'
 
-
+# ________________________________ ML MODEL ROUTES _____________
 
 @app.route('/api_post', methods=['POST'])
 def process_json():
@@ -20,6 +23,54 @@ def process_json():
     # process the JSON data to obtain an integer value
     result = data['header'] + data['body']  # for example, add two values
     return jsonify(result=result)
+
+
+
+# @app.route("/")
+
+# @app.route("/Heart")
+
+# def cancer():
+#     return render_template("form.html")
+
+def ValuePredictor(to_predict_list, size):
+    to_predict = np.array(to_predict_list).astype(np.float16)
+    to_predict[0]=to_predict[0]/100
+    to_predict=to_predict[np.newaxis,:]
+    if(size==16):
+        # loaded_model = joblib.load(r'C:\\Users\\Armaan\\Downloads\\GDSC\\Model (1).pkl')
+        loaded_model=tf.keras.models.load_model('model/Model_new.h5')
+        result = loaded_model.predict(to_predict)
+    return result[0][0]
+
+@app.route('/predict', methods = ["POST"])
+def predict():
+    if request.method == "POST":
+        to_predict_list = request.json.get("data")
+        print(to_predict_list)
+        to_predict_list = list(to_predict_list.values())
+        to_predict_list = list(map(float, to_predict_list))
+        print(to_predict_list)
+        if(len(to_predict_list)==16):
+            result = ValuePredictor(to_predict_list,16)
+
+    if(result>0.5):
+        prediction = { "status" :"Good", "advice":" We feel sorry to inform you that you might have probability of suffering from mental illness. Please consult your doctor immediately for proper therapy and medication."}
+    else:
+        prediction ={ "status" :"Bad", "advice":" Wohooo!!! You are not suffering from any Mental illness. Stay Healthy :)"}
+    print(result)
+    return json.dumps(prediction)
+
+
+
+'''
+{
+    "data":{'Age': '20', 'Gender': '1', 'self_employed': '1', 'family_history': '1', 'work_interfere': '1', 'no_employees': '2', 'remote_work': '1', 'tech_company': '1', 'benefits': '1', 'care_options': '1', 'wellness_program': '1', 'seek_help': '1', 'anonymity': '1', 'leave': '1', 'mental_health_consequence': '1', 'coworkers': '1'}
+}
+'''
+
+
+# _______________________________ SCRAPPING ROUTES ____________________
 
 @app.route("/fetch_doc")
 def doctor():
@@ -30,6 +81,8 @@ def doctor():
         return "not working"
 
 
+
+# _______________________________ USER AUTHENTCATION ROUTES _____________
 try:
     mongo=pymongo.MongoClient(host="localhost",port=27017, serverSelectionTimeoutMS=1000)
     db=mongo.content
@@ -75,7 +128,7 @@ def login_user():
                     status=400,
                     mimetype="application/json"
                 )
-        
+
         us=list(db.users.find())
         # print(us)
         for acc in us:
@@ -91,7 +144,7 @@ def login_user():
             status=401,
             mimetype="application/json"
         )
-                
+
     except Exception as ex:
         print(ex)
         return Response(
@@ -99,7 +152,7 @@ def login_user():
             status=500,
             mimetype="application/json"
         )
-    
+
 
 
 def getHashed(text): #function to get hashed email/password as it is reapeatedly used
@@ -109,18 +162,19 @@ def getHashed(text): #function to get hashed email/password as it is reapeatedly
     hashed = hashed.hexdigest() #converting to string
     return hashed #give hashed text back
 
+
 @app.route("/users",methods=["POST"])
 def create_user():
-    
+    data=request.json.get('data')
     try:       
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
         user={
-            "first name":request.form["first name"], 
-            "last name":request.form["last name"],
-            "email":request.form['email'],
-            "password_hash":request.form['password']
+            "first name":data['first name'], 
+            "last name":data['last name'],
+            "email":data['email'],
+            "password_hash":data['password']
         }
-        if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  : 
+        if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  :
             return Response(
                 response=json.dumps({"message":"Enter the details correctly!!"}),
                 status=400,
@@ -148,7 +202,7 @@ def create_user():
             status=200,
             mimetype="application/json"
         )
-       
+
 
     except Exception as ex:
         print(ex)
@@ -177,7 +231,7 @@ def update_user(id):
         )
 
 if __name__=='__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0",debug=True)
 
 
 
@@ -216,13 +270,13 @@ if __name__=='__main__':
 #         to_predict_list = list(map(float, to_predict_list))
 #         if(len(to_predict_list)==16):
 #             result = ValuePredictor(to_predict_list,16)
-    
+
 #     if(result>0.5):
 #         prediction =" We feel sorry to inform you that you might have probability of suffering from mental illness. Please consult your doctor immediately for proper therapy and medication."
 #     else:
 #         prediction =" Wohooo!!! You are not suffering from any Mental illness. Stay Healthy :)"
 #     print(result)
-#     return(render_template("result.html", prediction_text=prediction))       
+#     return(render_template("result.html", prediction_text=prediction))
 
 # if __name__ == "__main__":
 #     app.run(debug=True)
