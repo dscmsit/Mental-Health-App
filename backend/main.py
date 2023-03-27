@@ -186,12 +186,6 @@ def create_user():
                 status=400,
                 mimetype="application/json"
             )
-
-        # user={
-        #     'firstname':'saanvi',
-        #     'lastname':'bhagat',
-        #     'age':20
-        # }
         for us in db.users.find():
             print(us['email'])
             if us['email']==user["email"]:
@@ -240,51 +234,3 @@ def update_user(id):
 
 if __name__=='__main__':
     app.run(host="0.0.0.0",debug=True)
-
-
-
-
-
-# from flask import Flask, render_template, url_for, flash, redirect
-# import joblib
-# from flask import request
-# import numpy as np
-# import tensorflow as tf
-
-# app = Flask(__name__, template_folder='templates')
-
-# @app.route("/")
-
-# @app.route("/Heart")
-
-# def cancer():
-#     return render_template("form.html")
-
-# def ValuePredictor(to_predict_list, size):
-#     to_predict = np.array(to_predict_list).astype(np.float16)
-#     to_predict[0]=to_predict[0]/100
-#     to_predict=to_predict[np.newaxis,:]
-#     if(size==16):
-#         # loaded_model = joblib.load(r'C:\\Users\\Armaan\\Downloads\\GDSC\\Model (1).pkl')
-#         loaded_model=tf.keras.models.load_model('Model_new.h5')
-#         result = loaded_model.predict(to_predict)
-#     return result[0][0]
-
-# @app.route('/predict', methods = ["POST"])
-# def predict():
-#     if request.method == "POST":
-#         to_predict_list = request.form.to_dict()
-#         to_predict_list = list(to_predict_list.values())
-#         to_predict_list = list(map(float, to_predict_list))
-#         if(len(to_predict_list)==16):
-#             result = ValuePredictor(to_predict_list,16)
-
-#     if(result>0.5):
-#         prediction =" We feel sorry to inform you that you might have probability of suffering from mental illness. Please consult your doctor immediately for proper therapy and medication."
-#     else:
-#         prediction =" Wohooo!!! You are not suffering from any Mental illness. Stay Healthy :)"
-#     print(result)
-#     return(render_template("result.html", prediction_text=prediction))
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
