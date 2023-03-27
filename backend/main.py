@@ -37,9 +37,8 @@ def ValuePredictor(to_predict_list, size):
     to_predict = np.array(to_predict_list).astype(np.float16)
     to_predict[0]=to_predict[0]/100
     to_predict=to_predict[np.newaxis,:]
-    if(size==16):
-        # loaded_model = joblib.load(r'C:\\Users\\Armaan\\Downloads\\GDSC\\Model (1).pkl')
-        loaded_model=tf.keras.models.load_model('model/Model_new.h5')
+    if(size==13):
+        loaded_model = tf.keras.models.load_model('model/model3.h5')
         result = loaded_model.predict(to_predict)
     return result[0][0]
 
@@ -51,13 +50,13 @@ def predict():
         to_predict_list = list(to_predict_list.values())
         to_predict_list = list(map(float, to_predict_list))
         print(to_predict_list)
-        if(len(to_predict_list)==16):
-            result = ValuePredictor(to_predict_list,16)
+        if(len(to_predict_list) == 13):
+            result = ValuePredictor(to_predict_list, 13)
 
-    if(result>0.5):
-        prediction = { "status" :"Good", "advice":" We feel sorry to inform you that you might have probability of suffering from mental illness. Please consult your doctor immediately for proper therapy and medication."}
+    if(result > 0.7):
+        prediction = {"status": "Good","result":result*100}
     else:
-        prediction ={ "status" :"Bad", "advice":" Wohooo!!! You are not suffering from any Mental illness. Stay Healthy :)"}
+        prediction = {"status": "Bad","result":result*100}
     print(result)
     return json.dumps(prediction)
 
