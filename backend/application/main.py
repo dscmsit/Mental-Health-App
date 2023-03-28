@@ -9,7 +9,6 @@ import tensorflow as tf      # remove if not necessary
 import json
 import hashlib
 from bson.objectid import ObjectId
-from flask_cors import CORS, cross_origin
 
 
 load_dotenv()
@@ -179,7 +178,6 @@ def getHashed(text):  # function to get hashed email/password as it is reapeated
 
 # function for registration
 @app.route("/register", methods=["POST"])
-@cross_origin()
 def create_user():
     # return "User created"
     # print("helloo")

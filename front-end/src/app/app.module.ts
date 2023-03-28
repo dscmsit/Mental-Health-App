@@ -10,12 +10,13 @@ import { HomeComponent } from './Components/home/home.component';
 import { UserFormComponent } from './Components/user-form/user-form.component';
 import { CardComponent } from './Components/card/card.component';
 
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { FormsModule } from '@angular/forms';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { DoctorCardComponent } from './Components/doctor-card/doctor-card.component';
 import { ResultComponent } from './Components/result/result.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,16 +30,15 @@ import { ResultComponent } from './Components/result/result.component';
     ProfileComponent,
     DoctorCardComponent,
     ResultComponent,
-   
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
