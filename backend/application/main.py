@@ -1,6 +1,5 @@
 from application import app
 from application import db
-from dotenv import load_dotenv
 import os
 from flask import Flask, Response, request, jsonify
 from application.scraper import fetch_req
@@ -9,17 +8,6 @@ import tensorflow as tf      # remove if not necessary
 import json
 import hashlib
 from bson.objectid import ObjectId
-
-
-load_dotenv()
-
-# mongo db connection
-# mongodb_client = PyMongo(app)
-# # database_names = mongodb_client.list_database_names()
-# # print(database_names)
-# db = mongodb_client.db
-# triggers exception if unable to connect to the database
-# mongodb_client.server_info()
 
 
 @app.route("/")
