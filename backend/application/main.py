@@ -224,22 +224,33 @@ def create_user():
         for us in db.users.find():
             print(us['email'])
             if us['email'] == user["email"]:
-                return Response(
+                response = Response(
                     response=json.dumps(
                         {"message": "user already exists,login instead"}),
                     status=401,
                     mimetype="application/json"
                 )
+                response.headers.add('Access-Control-Allow-Origin', '*')
+                response.headers.add(
+                    'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+                response.headers.add(
+                    'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+                return response
         user["password_hash"] = getHashed(user["password_hash"])
         print(user["password_hash"])
         dbResponse = db.users.insert_one(user)
-        return Response(
+        response = Response(
             response=json.dumps(
                 {"message": "user registered", "id": f"{dbResponse.inserted_id}"}),
             status=200,
             mimetype="application/json"
         )
-
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add(
+            'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        response.headers.add(
+            'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response
     except Exception as ex:
         print(ex)
 
