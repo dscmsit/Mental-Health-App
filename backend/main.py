@@ -182,7 +182,6 @@ def getHashed(text):  # function to get hashed email/password as it is reapeated
 
 # function for registration
 @app.route("/users", methods=["POST"])
-@cross_origin()
 def create_user():
     # print("helloo")
     try:
@@ -196,6 +195,8 @@ def create_user():
             "dob": data['dob'],
             "gender": data['genderName']
         }
+
+        return jsonify(user)
         print("hello")
         if user["password_hash"] == "" or user["first name"] == "" or user["last name"] == "" or user["email"] == "":
             return Response(
