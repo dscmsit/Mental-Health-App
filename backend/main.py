@@ -8,12 +8,22 @@ import json
 import pymongo
 import hashlib
 from bson.objectid import ObjectId
-from flask_cors import CORS, cross_origin
+# from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-CORS(app)
 
 load_dotenv()
+
+# mongo db connection
+try:
+    client = pymongo.MongoClient(
+        f'mongodb+srv://dscmsitdelhi:0Laf2FB1Fv15ohir@cluster0.x3ezfa1.mongodb.net/?retryWrites=true&w=majority')
+    database_names = client.list_database_names()
+    print(database_names)
+    db = client.content
+    client.server_info()  # triggers exception if unable to connect to the database
+except:
+    print("ERROR-Cannot connect to the database")
 
 
 @app.route("/")
@@ -83,16 +93,6 @@ def doctor():
         return res
     except:
         return "not working"
-
-
-# mongo db connection
-try:
-    client = pymongo.MongoClient(
-        f'mongodb+srv://dscmsitdelhi:0Laf2FB1Fv15ohir@cluster0.x3ezfa1.mongodb.net/?retryWrites=true&w=majority')
-    db = client.content
-    client.server_info()  # triggers exception if unable to connect to the database
-except:
-    print("ERROR-Cannot connect to the database")
 
 
 # db = client.test
