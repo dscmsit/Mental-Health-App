@@ -103,7 +103,7 @@ except:
 def get_users():
     try:
         # print("wow")
-        data=list(db.users.find())
+        data = list(db.users.find())
         for d in data:
             d["_id"] = str(d["_id"])
 
@@ -180,24 +180,24 @@ def getHashed(text):  # function to get hashed email/password as it is reapeated
 # function for registration
 
 
-#function for registration
-@app.route("/users/",methods=["POST"])
+# function for registration
+@app.route("/users", methods=["POST"])
 @cross_origin()
 def create_user():
     # print("helloo")
-    try:      
-        data=request.json.get('data')
+    try:
+        data = request.json.get('data')
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
-        user={
-            "first name":data['first name'], 
-            "last name":data['last name'],
-            "email":data['email'],
-            "password_hash":data['password'],
-            "dob":data['dob'],
-            "gender":data['gender']
+        user = {
+            "first name": data['first_name'],
+            "last name": data['last_name'],
+            "email": data['email'],
+            "password_hash": data['password'],
+            "dob": data['dob'],
+            "gender": data['genderName']
         }
         print("hello")
-        if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  : 
+        if user["password_hash"] == "" or user["first name"] == "" or user["last name"] == "" or user["email"] == "":
             return Response(
                 response=json.dumps(
                     {"message": "Enter the details correctly!!"}),
@@ -231,11 +231,11 @@ def create_user():
 def update_user(id):
     data = request.json.get('data')
     try:
-        hashed=data["password"]
-        hashed=getHashed(hashed)
-        dbResponse=db.users.update_one(
-            {"_id":ObjectId(id)},
-            {"$set":{"password_hash":hashed}}
+        hashed = data["password"]
+        hashed = getHashed(hashed)
+        dbResponse = db.users.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": {"password_hash": hashed}}
         )
         return Response(
             response=json.dumps({"message": "user updated"}),
@@ -243,9 +243,9 @@ def update_user(id):
             mimetype="application/json"
         )
     except Exception as ex:
-        
+
         print(ex)
-        
+
         return Response(
             response=json.dumps({"message": "cannot update user"}),
             status=500,
