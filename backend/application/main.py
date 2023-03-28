@@ -179,20 +179,6 @@ def getHashed(text):  # function to get hashed email/password as it is reapeated
 # function for registration
 @app.route("/register", methods=["POST"])
 def create_user():
-    # return "User created"
-    # print("helloo")
-    # data = request.json.get('data')
-    # # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
-    # user = {
-    #     "first name": data['first_name'],
-    #     "last name": data['last_name'],
-    #     "email": data['email'],
-    #     "password_hash": data['password'],
-    #     "dob": data['dob'],
-    #     "gender": data['genderName']
-    # }
-    # userJson = json.dumps(user)
-    # return userJson
     try:
         data = request.json.get('data')
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
@@ -204,23 +190,19 @@ def create_user():
             "dob": data['dob'],
             "gender": data['genderName']
         }
-        # return jsonify({'name': 'sofia', 'email': 'sofia@gmail.com'})
-
-        # return Response(
-        #     response=json.dumps(
-        #         {"results": "User successfully registered",
-        #          "user": user}),
-        #     status=200,
-        #     mimetype="application/json"
-        # )
-        print("hello")
         if user["password_hash"] == "" or user["first name"] == "" or user["last name"] == "" or user["email"] == "":
-            return Response(
+            response = Response(
                 response=json.dumps(
                     {"message": "Enter the details correctly!!"}),
                 status=400,
                 mimetype="application/json"
             )
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add(
+                'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+            response.headers.add(
+                'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+            return response
         for us in db.users.find():
             print(us['email'])
             if us['email'] == user["email"]:
@@ -253,6 +235,17 @@ def create_user():
         return response
     except Exception as ex:
         print(ex)
+        response = Response(
+            response=json.dumps({"message": "cannot create user"}),
+            status=500,
+            mimetype="application/json"
+        )
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add(
+            'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        response.headers.add(
+            'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response
 
 
 @app.route("/users/<id>", methods=["PUT"])
