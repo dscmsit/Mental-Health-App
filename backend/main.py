@@ -88,7 +88,7 @@ def doctor():
 # mongo db connection
 try:
     client = pymongo.MongoClient(
-        f'mongodb+srv://dscmsitdelhi:{os.environ.get("password")}@cluster0.x3ezfa1.mongodb.net/?retryWrites=true&w=majority')
+        f'mongodb+srv://dscmsitdelhi:0Laf2FB1Fv15ohir@cluster0.x3ezfa1.mongodb.net/?retryWrites=true&w=majority')
     db = client.content
     client.server_info()  # triggers exception if unable to connect to the database
 except:
