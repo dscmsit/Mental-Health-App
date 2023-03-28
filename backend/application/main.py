@@ -1,29 +1,26 @@
+from application import app
+from application import db
 from dotenv import load_dotenv
 import os
 from flask import Flask, Response, request, jsonify
-from scraper import fetch_req
+from application.scraper import fetch_req
 import numpy as np
 import tensorflow as tf      # remove if not necessary
 import json
-import pymongo
 import hashlib
 from bson.objectid import ObjectId
 # from flask_cors import CORS, cross_origin
 
-app = Flask(__name__)
 
 load_dotenv()
 
 # mongo db connection
-try:
-    client = pymongo.MongoClient(
-        f'mongodb+srv://dscmsitdelhi:0Laf2FB1Fv15ohir@cluster0.x3ezfa1.mongodb.net/?retryWrites=true&w=majority')
-    database_names = client.list_database_names()
-    print(database_names)
-    db = client.content
-    client.server_info()  # triggers exception if unable to connect to the database
-except:
-    print("ERROR-Cannot connect to the database")
+# mongodb_client = PyMongo(app)
+# # database_names = mongodb_client.list_database_names()
+# # print(database_names)
+# db = mongodb_client.db
+# triggers exception if unable to connect to the database
+# mongodb_client.server_info()
 
 
 @app.route("/")
@@ -272,8 +269,3 @@ def update_user(id):
             status=500,
             mimetype="application/json"
         )
-
-
-if __name__ == '__main__':
-    app.debug = True
-    app.run()
