@@ -12,8 +12,10 @@ import { CardComponent } from './Components/card/card.component';
 
 import {HttpClientModule} from '@angular/common/http';
 
-
-import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
+import { ProfileComponent } from './Components/profile/profile.component';
+import { DoctorCardComponent } from './Components/doctor-card/doctor-card.component';
+import { ResultComponent } from './Components/result/result.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
     HomeComponent,
     UserFormComponent,
     CardComponent,
+    ProfileComponent,
+    DoctorCardComponent,
+    ResultComponent,
    
   ],
   imports: [

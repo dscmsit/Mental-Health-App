@@ -1,0 +1,72 @@
+
+<div
+  class="p-8 mx-auto my-20 drop-shadow-2xl h-auto w-2/6 border-4 bg-white rounded-lg"
+>
+  <h2 class="text-black font-bold p-2 text-center text-3xl">Profile</h2>
+  <form class="flex flex-col text-lg" #userPost="ngForm" >
+    <div class="bg-white p-4 flex ">
+      <label class="m-1">First Name </label>
+      <input
+        class="border-2 m-1 p-1 border-black-900"
+        placeholder="Ex. John"
+        type="text"
+        name="first name" 
+        ngModel
+      /><br />
+      </div>
+
+
+      <div class="bg-white p-4 flex ">
+      <label class="m-1">Last Name </label>
+      <input
+        class="border-2 m-1 p-1 border-black-900"
+        placeholder="Ex. Doe"
+        type="text"
+        name="last name" 
+        ngModel
+      /><br />
+    </div>
+
+
+      <div class="bg-white p-4 flex ">
+      <label class="m-1 ">Email </label>
+      <input
+        class="border-2 m-1 p-1 border-black-900 ml-11"
+        placeholder="Ex. johndoe@email.com"
+        type="email"
+        name="email" 
+        ngModel
+      /><br />
+    </div>
+
+      <div class="bg-white p-4 flex ">
+      <label class="m-1">DOB</label>
+      <input
+      class="border-2 m-1 p-1 border-black-900 ml-12"
+      placeholder="Ex. 01/01/2000"
+      type="text"
+      name="dob" 
+      ngModel
+    /><br />
+    </div>
+
+      <div class="bg-white p-4 flex ">
+      <label>Gender</label>
+      <input
+      class="border-2 m-1 p-1 border-black-900 ml-8"
+      placeholder="Ex. male"
+      type="text"
+      name="gender" 
+      ngModel
+    /><br />
+    </div>
+    
+    <button
+      type="submit"
+      class="text-white border-2 bg-[#222831] w-64 mx-auto py-2 text-xl font-medium rounded m-2 hover:bg-white hover:text-black hover:border-2 hover:border-black transition-all ease-in-out"
+    >
+     Log out
+    </button>
+  </form>
+ 
+</div>

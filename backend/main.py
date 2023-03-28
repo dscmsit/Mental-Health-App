@@ -1,6 +1,10 @@
-import json
+from dotenv import load_dotenv
+import os
 from flask import Flask, Response, request, jsonify
 from scraper import fetch_req
+import numpy as np
+import tensorflow as tf      # remove if not necessary
+import json
 import pymongo
 import hashlib
 from bson.objectid import ObjectId
@@ -9,10 +13,14 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app)
 
+load_dotenv()
+
+
 @app.route("/")
 def hello_world():
     return 'welcome to mental api health'
 
+# ________________________________ ML MODEL ROUTES _____________
 
 
 @app.route('/api_post', methods=['POST'])
@@ -22,6 +30,52 @@ def process_json():
     result = data['header'] + data['body']  # for example, add two values
     return jsonify(result=result)
 
+
+# @app.route("/")
+
+# @app.route("/Heart")
+
+# def cancer():
+#     return render_template("form.html")
+
+def ValuePredictor(to_predict_list, size):
+    to_predict = np.array(to_predict_list).astype(np.float16)
+    to_predict[0] = to_predict[0]/100
+    to_predict = to_predict[np.newaxis, :]
+    if (size == 13):
+        loaded_model = tf.keras.models.load_model('model/model3.h5')
+        result = loaded_model.predict(to_predict)
+    return result[0][0]
+
+
+@app.route('/predict', methods=["POST"])
+def predict():
+    if request.method == "POST":
+        to_predict_list = request.json.get("data")
+        print(to_predict_list)
+        to_predict_list = list(to_predict_list.values())
+        to_predict_list = list(map(float, to_predict_list))
+        print(to_predict_list)
+        if (len(to_predict_list) == 13):
+            result = ValuePredictor(to_predict_list, 13)
+
+    if (result > 0.7):
+        prediction = {"status": "Good", "result": result*100}
+    else:
+        prediction = {"status": "Bad", "result": result*100}
+    print(result)
+    return json.dumps(prediction)
+
+
+'''
+{
+    "data":{'Age': '20', 'Gender': '1', 'self_employed': '1', 'family_history': '1', 'work_interfere': '1', 'no_employees': '2', 'remote_work': '1', 'tech_company': '1', 'benefits': '1', 'care_options': '1', 'wellness_program': '1', 'seek_help': '1', 'anonymity': '1', 'leave': '1', 'mental_health_consequence': '1', 'coworkers': '1'}
+}
+'''
+
+
+# _______________________________ SCRAPPING ROUTES ____________________
+
 @app.route("/fetch_doc")
 def doctor():
     try:
@@ -30,23 +84,28 @@ def doctor():
     except:
         return "not working"
 
+
 # mongo db connection
 try:
-    mongo=pymongo.MongoClient(host="localhost",port=27017, serverSelectionTimeoutMS=1000)
-    db=mongo.content
-    mongo.server_info()  #triggers exception if unable to connect to the database
+    client = pymongo.MongoClient(
+        f'mongodb+srv://dscmsitdelhi:{os.environ.get("password")}@cluster0.x3ezfa1.mongodb.net/?retryWrites=true&w=majority')
+    db = client
+    client.server_info()  # triggers exception if unable to connect to the database
 except:
     print("ERROR-Cannot connect to the database")
 
 
-#get users api
-@app.route("/get_user",methods=["GET"])
+# db = client.test
+
+
+# get users api
+@app.route("/get_user", methods=["GET"])
 def get_users():
     try:
         # print("wow")
         data=list(db.users.find())
         for d in data:
-            d["_id"]=str(d["_id"])
+            d["_id"] = str(d["_id"])
 
         return Response(
             response=json.dumps(data),
@@ -56,64 +115,70 @@ def get_users():
     except Exception as ex:
         print(ex)
         return Response(
-            response=json.dumps({"message":"cannot read user"}),
+            response=json.dumps({"message": "cannot read user"}),
             status=500,
             mimetype="application/json"
         )
 
 
-#login api
+# login api
 
-@app.route("/login",methods=["POST"])
+@app.route("/login", methods=["POST"])
 def login_user():
-    data=request.json.get('data')
+    data = request.json.get('data')
     try:
         # print("wow")
-        user={
-            "email":data['email'],
+        user = {
+            "email": data['email'],
             "password_rec": data["password"]
         }
-        user["password_rec"]=getHashed(user["password_rec"])
-        if user["email"]=="" or user["password_rec"]=="":
-            return  Response(
-                    response=json.dumps({"message":"Enter the details correctly!!"}),
-                    status=400,
-                    mimetype="application/json"
-                )
-        
-        us=list(db.users.find())
+        user["password_rec"] = getHashed(user["password_rec"])
+        if user["email"] == "" or user["password_rec"] == "":
+            return Response(
+                response=json.dumps(
+                    {"message": "Enter the details correctly!!"}),
+                status=400,
+                mimetype="application/json"
+            )
+
+        us = list(db.users.find())
         # print(us)
         for acc in us:
             print(acc["email"])
-            if user["email"]==acc["email"] and user["password_rec"]==acc["password_hash"]:
+            if user["email"] == acc["email"] and user["password_rec"] == acc["password_hash"]:
                 return Response(
-                    response=json.dumps({"message":"User successfully logged in"}),
+                    response=json.dumps(
+                        {"message": "User successfully logged in"}),
                     status=200,
                     mimetype="application/json"
                 )
         return Response(
-            response=json.dumps({"message":"User does not exist, register instead"}),
+            response=json.dumps(
+                {"message": "User does not exist, register instead"}),
             status=401,
             mimetype="application/json"
         )
-                
+
     except Exception as ex:
         print(ex)
         return Response(
-            response=json.dumps({"message":"cannot read user"}),
+            response=json.dumps({"message": "cannot read user"}),
             status=500,
             mimetype="application/json"
         )
-    
+
 
 # function for hashing password
 
-def getHashed(text): #function to get hashed email/password as it is reapeatedly used
-    salt = "ITSASECRET" #salt for password security
-    hashed = text + salt #salting password
-    hashed = hashlib.md5(hashed.encode()) #encrypting with md5 hash
-    hashed = hashed.hexdigest() #converting to string
-    return hashed #give hashed text back
+def getHashed(text):  # function to get hashed email/password as it is reapeatedly used
+    salt = "ITSASECRET"  # salt for password security
+    hashed = text + salt  # salting password
+    hashed = hashlib.md5(hashed.encode())  # encrypting with md5 hash
+    hashed = hashed.hexdigest()  # converting to string
+    return hashed  # give hashed text back
+
+# function for registration
+
 
 #function for registration
 @app.route("/users/",methods=["POST"])
@@ -124,93 +189,56 @@ def create_user():
         data=request.json.get('data')
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
         user={
-            "first name":data['first_name'], 
-            "last name":data['last_name'],
+            "first name":data['first name'], 
+            "last name":data['last name'],
             "email":data['email'],
             "password_hash":data['password'],
             "dob":data['dob'],
-            "gender":data['genderName']
+            "gender":data['gender']
         }
         print("hello")
         if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  : 
             return Response(
-                response=json.dumps({"message":"Enter the details correctly!!"}),
+                response=json.dumps(
+                    {"message": "Enter the details correctly!!"}),
                 status=400,
                 mimetype="application/json"
             )
-
-        # user={
-        #     'firstname':'saanvi',
-        #     'lastname':'bhagat',
-        #     'age':20
-        # }
         for us in db.users.find():
             print(us['email'])
-            if us['email']==user["email"]:
-                return  Response(
-                    response=json.dumps({"message":"user already exists,login instead"}),
+            if us['email'] == user["email"]:
+                return Response(
+                    response=json.dumps(
+                        {"message": "user already exists,login instead"}),
                     status=401,
                     mimetype="application/json"
                 )
-        user["password_hash"] =getHashed(user["password_hash"])
+        user["password_hash"] = getHashed(user["password_hash"])
         print(user["password_hash"])
-        dbResponse=db.users.insert_one(user)
+        dbResponse = db.users.insert_one(user)
         return Response(
-            response=json.dumps({"message":"user registered", "id": f"{dbResponse.inserted_id}"}),
+            response=json.dumps(
+                {"message": "user registered", "id": f"{dbResponse.inserted_id}"}),
             status=200,
             mimetype="application/json"
         )
-       
 
     except Exception as ex:
         print(ex)
-        data=request.json.get('data')
-        print(data)
-        
 
 
-@app.route("/users/<id>",methods=["PUT"])
+@app.route("/users/<id>", methods=["PUT"])
 def update_user(id):
-    data=request.json.get('data')
+    data = request.json.get('data')
     try:
-        # print(list(data))
-        for i in list(data):
-            if i=='password':
-                print("wow")
-
-                hashed=data["password"]
-                hashed=getHashed(hashed)
-                dbResponse=db.users.update_one(
-                    {"_id":ObjectId(id)},
-                    {"$set":{"password_hash":hashed}}
-                )
-            elif i=='first_name':
-                dbResponse=db.users.update_one(
-                    {"_id":ObjectId(id)},
-                    {"$set":{"first name":data["first_name"]}}
-                )
-            elif i=='last_name':
-                dbResponse=db.users.update_one(
-                    {"_id":ObjectId(id)},
-                    {"$set":{"last name":data["last_name"]}}
-                )
-            elif i=='email':
-                dbResponse=db.users.update_one(
-                    {"_id":ObjectId(id)},
-                    {"$set":{"email":data["email"]}}
-                )
-            elif i=='dob':
-                dbResponse=db.users.update_one(
-                    {"_id":ObjectId(id)},
-                    {"$set":{"dob":data["dob"]}}
-                )
-            elif i=='genderName':
-                dbResponse=db.users.update_one(
-                    {"_id":ObjectId(id)},
-                    {"$set":{"gender":data["genderName"]}}
-                )
+        hashed=data["password"]
+        hashed=getHashed(hashed)
+        dbResponse=db.users.update_one(
+            {"_id":ObjectId(id)},
+            {"$set":{"password_hash":hashed}}
+        )
         return Response(
-            response=json.dumps({"message":"user updated"}),
+            response=json.dumps({"message": "user updated"}),
             status=200,
             mimetype="application/json"
         )
@@ -219,58 +247,11 @@ def update_user(id):
         print(ex)
         
         return Response(
-            response=json.dumps({"message":"cannot update user"}),
+            response=json.dumps({"message": "cannot update user"}),
             status=500,
             mimetype="application/json"
         )
 
-if __name__=='__main__':
-    app.run(debug=True)
 
-
-
-
-
-# from flask import Flask, render_template, url_for, flash, redirect
-# import joblib
-# from flask import request
-# import numpy as np
-# import tensorflow as tf
-
-# app = Flask(__name__, template_folder='templates')
-
-# @app.route("/")
-
-# @app.route("/Heart")
-
-# def cancer():
-#     return render_template("form.html")
-
-# def ValuePredictor(to_predict_list, size):
-#     to_predict = np.array(to_predict_list).astype(np.float16)
-#     to_predict[0]=to_predict[0]/100
-#     to_predict=to_predict[np.newaxis,:]
-#     if(size==16):
-#         # loaded_model = joblib.load(r'C:\\Users\\Armaan\\Downloads\\GDSC\\Model (1).pkl')
-#         loaded_model=tf.keras.models.load_model('Model_new.h5')
-#         result = loaded_model.predict(to_predict)
-#     return result[0][0]
-
-# @app.route('/predict', methods = ["POST"])
-# def predict():
-#     if request.method == "POST":
-#         to_predict_list = request.form.to_dict()
-#         to_predict_list = list(to_predict_list.values())
-#         to_predict_list = list(map(float, to_predict_list))
-#         if(len(to_predict_list)==16):
-#             result = ValuePredictor(to_predict_list,16)
-    
-#     if(result>0.5):
-#         prediction =" We feel sorry to inform you that you might have probability of suffering from mental illness. Please consult your doctor immediately for proper therapy and medication."
-#     else:
-#         prediction =" Wohooo!!! You are not suffering from any Mental illness. Stay Healthy :)"
-#     print(result)
-#     return(render_template("result.html", prediction_text=prediction))       
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", debug=True)
