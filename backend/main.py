@@ -188,12 +188,12 @@ def create_user():
 
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
         user = {
-            "first name": data['first name'],
-            "last name": data['last name'],
+            "first name": data['first_name'],
+            "last name": data['last_name'],
             "email": data['email'],
             "password_hash": data['password'],
             "dob": data['dob'],
-            "gender": data['gender']
+            "gender": data['genderName']
         }
         if user["password_hash"] == "" or user["first name"] == "" or user["last name"] == "" or user["email"] == "":
             return Response(
