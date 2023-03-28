@@ -4,7 +4,7 @@ from scraper import fetch_req
 import pymongo
 import hashlib
 from bson.objectid import ObjectId
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
@@ -43,7 +43,7 @@ except:
 @app.route("/get_user",methods=["GET"])
 def get_users():
     try:
-        print("wow")
+        # print("wow")
         data=list(db.users.find())
         for d in data:
             d["_id"]=str(d["_id"])
@@ -116,21 +116,22 @@ def getHashed(text): #function to get hashed email/password as it is reapeatedly
     return hashed #give hashed text back
 
 #function for registration
-@app.route("/users",methods=["POST"])
+@app.route("/users/",methods=["POST"])
+@cross_origin()
 def create_user():
-    print("helloo")
+    # print("helloo")
     try:      
         data=request.json.get('data')
-        
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
         user={
-            "first name":data['first name'], 
-            "last name":data['last name'],
+            "first name":data['first_name'], 
+            "last name":data['last_name'],
             "email":data['email'],
             "password_hash":data['password'],
             "dob":data['dob'],
-            "gender":data['gender']
+            "gender":data['genderName']
         }
+        print("hello")
         if user["password_hash"]=="" or user["first name"]=="" or user["last name"]=="" or user["email"]==""  : 
             return Response(
                 response=json.dumps({"message":"Enter the details correctly!!"}),
@@ -163,6 +164,8 @@ def create_user():
 
     except Exception as ex:
         print(ex)
+        data=request.json.get('data')
+        print(data)
         
 
 
@@ -170,19 +173,51 @@ def create_user():
 def update_user(id):
     data=request.json.get('data')
     try:
-        hashed=data["password"]
-        hashed=getHashed(hashed)
-        dbResponse=db.users.update_one(
-            {"_id":ObjectId(id)},
-            {"$set":{"password_hash":hashed}}
-        )
+        # print(list(data))
+        for i in list(data):
+            if i=='password':
+                print("wow")
+
+                hashed=data["password"]
+                hashed=getHashed(hashed)
+                dbResponse=db.users.update_one(
+                    {"_id":ObjectId(id)},
+                    {"$set":{"password_hash":hashed}}
+                )
+            elif i=='first_name':
+                dbResponse=db.users.update_one(
+                    {"_id":ObjectId(id)},
+                    {"$set":{"first name":data["first_name"]}}
+                )
+            elif i=='last_name':
+                dbResponse=db.users.update_one(
+                    {"_id":ObjectId(id)},
+                    {"$set":{"last name":data["last_name"]}}
+                )
+            elif i=='email':
+                dbResponse=db.users.update_one(
+                    {"_id":ObjectId(id)},
+                    {"$set":{"email":data["email"]}}
+                )
+            elif i=='dob':
+                dbResponse=db.users.update_one(
+                    {"_id":ObjectId(id)},
+                    {"$set":{"dob":data["dob"]}}
+                )
+            elif i=='genderName':
+                dbResponse=db.users.update_one(
+                    {"_id":ObjectId(id)},
+                    {"$set":{"gender":data["genderName"]}}
+                )
         return Response(
             response=json.dumps({"message":"user updated"}),
             status=200,
             mimetype="application/json"
         )
     except Exception as ex:
+        
         print(ex)
+        
         return Response(
             response=json.dumps({"message":"cannot update user"}),
             status=500,
