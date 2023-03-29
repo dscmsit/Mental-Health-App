@@ -8,29 +8,6 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./sign-up.component.css'],
 })
 export class SignUpComponent implements OnInit {
-  // constructor(private http:HttpClient){}
-  // ngOnInit(): void {
-  //   throw new Error('Method not implemented.');
-  // }
-  // changeGender(e:any){
-  //   this.gender
-  // }
-  // onSubmit(){
-  //   const reg={
-  //     first_name:this.first_name,
-  //     last_name:this.last_name,
-  //     email:this.email,
-  //     password:this.password,
-  //     confirm_pass:this.confirm_pass,
-  //     dob:this.dob,
-  //     gender:this.gender
-  //   }
-  //   console.warn(reg)
-  //   if(reg.first_name==""){
-  //     console.log("field cannot be empty")
-  //   }
-
-  // }
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }
@@ -39,6 +16,7 @@ export class SignUpComponent implements OnInit {
 
   constructor(public fb: FormBuilder, private http: HttpClient) {}
   registrationForm = this.fb.group({
+    stateName: ['', [Validators.required]],
     genderName: ['', [Validators.required]],
     first_name: ['', [Validators.required]],
     last_name: ['', [Validators.required]],
@@ -46,10 +24,16 @@ export class SignUpComponent implements OnInit {
     password: ['', [Validators.required]],
     confirm_pass: ['', [Validators.required]],
     dob: ['', [Validators.required]],
+    
   });
 
   changeGender(e: any) {
     this.genderName?.setValue(e.target.value, {
+      onlySelf: true,
+    });
+  }
+  changeState(e: any){
+    this.stateName?.setValue(e.target.value,{
       onlySelf: true,
     });
   }
@@ -75,6 +59,9 @@ export class SignUpComponent implements OnInit {
   get dob() {
     return this.registrationForm.get('dob');
   }
+  get stateName(){
+    return this.registrationForm.get('stateName')
+  }
   onSubmit() {
     // console.warn(this.registrationForm.);
     if (
@@ -84,11 +71,12 @@ export class SignUpComponent implements OnInit {
       // continue
       alert('passwords do not match');
     }
+    console.warn(this.registrationForm.value)
     const data = JSON.stringify(this.registrationForm.value);
 
     // console.warn(data);
     this.http
-      .post<any>('https://mentalhealthbackend.onrender.com/users', data)
+      .post<any>('https://mentalhealthbackend.onrender.com/register', data)
       .subscribe((result) => {
         console.log(result);
       });
