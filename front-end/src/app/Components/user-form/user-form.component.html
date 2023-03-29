@@ -1,8 +1,8 @@
 <div
-  class="p-8 mx-auto drop-shadow-2xl h-auto w-96 border-4 bg-white rounded-lg"
+  class="p-8 mx-auto drop-shadow-2xl h-auto w-[50vw] text-justify border-4 bg-white rounded-lg"
 >
   <h2 class="text-black font-bold p-2 text-center text-3xl">User Form</h2>
-  <form class="flex flex-col text-lg">
+  <form class="flex flex-col text-lg" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <div class="bg-white p-4 flex flex-col">
       <label class="m-1">1. Age </label>
       <input
@@ -11,19 +11,21 @@
         max="120"
         placeholder="age"
         type="number"
+        formControlName="Age"
       /><br />
       <label class="m-1">2. Gender </label>
       <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
-      >
-        <option default value="option1"></option>
-        <option value="option2">Male</option>
-        <option value="option3">Female</option>
-        <option value="option3">Others</option></select
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+        formControlName="Gender"
+        >
+        
+        <option default value="1">Male</option>
+        <option value="0">Female</option>
+        </select
       ><br />
       <!-- <label class="m-1">3. Are you self-employed? </label>
       <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
         <option default value="option1">select</option>
         <option value="option2">Yes</option>
@@ -33,18 +35,17 @@
         >3. Do you have a family history of mental illness?</label
       >
       <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
-      >
-        <option default value="option1">select</option>
-        <option value="option2">Yes</option>
-        <option value="option3">No</option></select
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+        formControlName="family_history">
+        <option value="1">Yes</option>
+        <option value="0">No</option></select
       ><br />
       <!-- <label class="m-1"
         >5. If you have a mental health condition, do you feel that it
         interferes with your work?
       </label>
       <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
         <option default value="option1">select</option>
         <option value="option2">Often</option>
@@ -55,16 +56,13 @@
       <label class="m-1"
         >4. How many employees does your company or organization have?</label
       >
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select  formControlName="no_employees"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default value="option1">select</option>
-        <option value="option2">1-5</option>
-        <option value="option3">6-25</option>
-        <option value="option4">26-100</option>
-        <option value="option5">100-500</option>
-        <option value="option6">500-1000</option>
-        <option value="option7">More than 1000</option>
+      <option value="0">1-25</option>
+      <option value="2">26-100</option>
+      <option value="3">100-1000</option>
+      <option value="1">More than 1000</option>
       </select>
       <br />
 
@@ -72,18 +70,17 @@
         >5. Do you work remotely (outside of an office) at least 50% of the
         time?
       </label>
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select  formControlName="remote_work"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default value="option1">select</option>
-        <option value="option2">Yes</option>
-        <option value="option3">No</option></select
-      ><br />
+      <option value="0">No</option>
+      <option value="1">Yes</option>
+        </select><br />
       <!-- <label class="m-1"
         >8. Is your employer primarily a tech company/organization?</label
       >
       <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
         <option default value="option1">select</option>
         <option value="option2">Yes</option>
@@ -92,107 +89,94 @@
       <label class="m-1"
         >6. Does your employer provide mental health benefits?
       </label>
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select  formControlName="benefits"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default value="option1">select</option>
-        <option value="option2">Yes</option>
-        <option value="option3">No</option>
-        <option value="option4">Don't kNow</option></select
-      ><br />
+      <option value="0">Yes</option>
+      <option value="2">No</option>
+      <option value="1">Don't know</option>
+        </select ><br />
       <label class="m-1"
         >7. Do you kNow the options for mental health care your employer
         provides?</label
       >
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select  formControlName="care_options"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default value="option1">select</option>
-        <option value="option2">Yes</option>
-        <option value="option3">No</option>
-        <option value="option4">Not sure</option></select
+      <option value="1">No</option>
+      <option value="0">Not sure</option>
+      <option value="2">Yes</option></select
       ><br />
       <label class="m-1"
         >8. Has your employer ever discussed mental health as part of an
         employee wellness program?
       </label>
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select  formControlName="wellness_program"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default value="option1">select</option>
-        <option value="option2">Yes</option>
-        <option value="option3">No</option>
-        <option value="option4">Don't kNow</option></select
-      ><br />
+      <option value="1">Yes</option>
+      <option value="0">No</option>
+     </select><br />
       <label class="m-1"
         >9. Does your employer provide resources to learn more about mental
         health issues and how to seek help?</label
       >
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select  formControlName="seek_help"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default>select</option>
-        <option value="option2">Yes</option>
-        <option value="option3">No</option>
-        <option value="option4">Don't kNow</option></select
+      <option value="0">Yes</option>
+      <option value="1">No</option></select
       ><br />
 
       <label class="m-1">
-        10. Is your aNonymity protected if you choose to take advantage of
+        10. Is your anonymity protected if you choose to take advantage of
         mental health or substance abuse treatment resources?
       </label>
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select  formControlName="anonymity"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default>select</option>
-        <option value="option2">Yes</option>
-        <option value="option3">No</option>
-        <option value="option4">Don't kNow</option></select
+      <option value="0">Yes</option>
+      <option value="1">No</option></select
       ><br />
       <label class="m-1"
         >11.How easy is it for you to take medical leave for a mental health
         condition?</label
       >
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select  formControlName="leave"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default>select</option>
-        <option value="option2">Somewhat easy</option>
-        <option value="option3">Very easy</option>
-        <option value="option4">Somewhat difficult</option>
-        <option value="option5">Very difficult</option>
-        <option value="option6">Don't kNow</option></select
+      <option value="0">Easy</option>
+      <option value="1">Don't know</option>
+      <option value="2">difficult</option></select
       ><br />
       <label class="m-1"
         >12.Do you think that discussing a mental health issue with your
         employer would have negative consequences?
       </label>
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select formControlName="mental_health_consequence"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default>select</option>
-        <option value="option2">Yes</option>
-        <option value="option3">No</option>
-        <option value="option4">Maybe</option></select
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+      <option value="0">Maybe</option></select
       ><br />
       <label class="m-1"
         >13. Would you be willing to discuss a mental health issue with your
         coworkers?</label
       >
-      <select
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
+      <select formControlName="coworkers"
+        class="text-black bg-white w-auto m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
       >
-        <option default>select</option>
-        <option value="option2">Yes</option>
-        <option value="option3">No</option>
-        <option value="option4">Some of them</option></select
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+      <option value="0">Some of them</option></select
       ><br />
     </div>
     <button
       type="submit"
       class="text-white border-2 bg-black w-64 mx-auto py-2 text-xl font-medium rounded m-2 hover:bg-white hover:text-black hover:border-2 hover:border-black transition-all ease-in-out"
     >
-      <a routerLink="../result">Submit</a> 
+      <a routerLink="../result">Predict</a> 
     </button>
   </form>
 </div>

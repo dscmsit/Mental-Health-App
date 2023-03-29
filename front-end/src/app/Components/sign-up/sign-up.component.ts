@@ -39,6 +39,7 @@ export class SignUpComponent implements OnInit {
 
   constructor(public fb: FormBuilder, private http: HttpClient) {}
   registrationForm = this.fb.group({
+    stateName: ['', [Validators.required]],
     genderName: ['', [Validators.required]],
     first_name: ['', [Validators.required]],
     last_name: ['', [Validators.required]],
@@ -46,10 +47,17 @@ export class SignUpComponent implements OnInit {
     password: ['', [Validators.required]],
     confirm_pass: ['', [Validators.required]],
     dob: ['', [Validators.required]],
+    
   });
+
 
   changeGender(e: any) {
     this.genderName?.setValue(e.target.value, {
+      onlySelf: true,
+    });
+  }
+  changeState(e: any){
+    this.stateName?.setValue(e.target.value,{
       onlySelf: true,
     });
   }
@@ -74,6 +82,9 @@ export class SignUpComponent implements OnInit {
   }
   get dob() {
     return this.registrationForm.get('dob');
+  }
+  get stateName(){
+    return this.registrationForm.get('stateName')
   }
   onSubmit() {
     // console.warn(this.registrationForm.);
