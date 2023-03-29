@@ -70,7 +70,7 @@ def doctor():
 def get_users(id):
     try:
         # print("wow")
-        data = db.user.find_one({"_id": ObjectId(id)})
+        data = db.users.find_one({"_id": ObjectId(id)})
         response = Response(
             response=json.dumps(data),
             status=200,
@@ -117,13 +117,13 @@ def login_user():
                 mimetype="application/json"
             )
 
-        us = db.user.find_one({"email": user["email"]})
-        # print(us)
+        us = db.users.find_one({"email": user["email"]})
         if us:
-            if us["password"] == user["password_rec"]:
+            print(us)
+            if us["password_hash"] == user["password_rec"]:
                 response = Response(
                     response=json.dumps(
-                        {"status": "true", "message": "User successfully logged in", "id": str(us["_id"])}),
+                        {"status": "true", "message": "User successfully logged in", "id": f'{str(us["_id"])}'}),
                     status=200,
                     mimetype="application/json"
                 )
