@@ -38,6 +38,8 @@ export class SignUpComponent implements OnInit {
   Gender: any = ['Male', 'Female', 'Others'];
 
   constructor(public fb: FormBuilder, private http: HttpClient) {}
+
+
   registrationForm = this.fb.group({
     genderName: ['', [Validators.required]],
     first_name: ['', [Validators.required]],
@@ -101,5 +103,6 @@ export class SignUpComponent implements OnInit {
       .subscribe((result) => {
         console.log(result);
       });
+      console.log("this is after fetch");
   }
 }

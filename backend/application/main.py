@@ -10,6 +10,19 @@ import hashlib
 from bson.objectid import ObjectId
 
 
+'''
+ALL THE AVAILABLE ENDPOINTS
+
+/ - to check
+/api_post - uselss - removed
+/predict - POST - ML model
+/fetch_doc - Post - pass state name
+/get_user - GET - pass username as querry - to remove
+/login - GET - pass details as json
+/register - POST - Signup
+/user/<id> - PUT - also GET user
+
+'''
 @app.route("/")
 def hello_world():
     return 'welcome to mental api health'
@@ -37,7 +50,7 @@ def ValuePredictor(to_predict_list, size):
     to_predict[0] = to_predict[0]/100
     to_predict = to_predict[np.newaxis, :]
     if (size == 13):
-        loaded_model = tf.keras.models.load_model('model/model3.h5')
+        loaded_model = tf.keras.models.load_model('../model/model3.h5')
         result = loaded_model.predict(to_predict)
     return result[0][0]
 
