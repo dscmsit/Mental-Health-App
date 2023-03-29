@@ -1,6 +1,5 @@
 from application import app
 from application import db
-from dotenv import load_dotenv
 import os
 from flask import Flask, Response, request, jsonify
 from application.scraper import fetch_req
@@ -9,18 +8,6 @@ import tensorflow as tf      # remove if not necessary
 import json
 import hashlib
 from bson.objectid import ObjectId
-from flask_cors import CORS, cross_origin
-
-
-load_dotenv()
-
-# mongo db connection
-# mongodb_client = PyMongo(app)
-# # database_names = mongodb_client.list_database_names()
-# # print(database_names)
-# db = mongodb_client.db
-# triggers exception if unable to connect to the database
-# mongodb_client.server_info()
 
 
 @app.route("/")
@@ -179,22 +166,7 @@ def getHashed(text):  # function to get hashed email/password as it is reapeated
 
 # function for registration
 @app.route("/register", methods=["POST"])
-@cross_origin()
 def create_user():
-    # return "User created"
-    # print("helloo")
-    # data = request.json.get('data')
-    # # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
-    # user = {
-    #     "first name": data['first_name'],
-    #     "last name": data['last_name'],
-    #     "email": data['email'],
-    #     "password_hash": data['password'],
-    #     "dob": data['dob'],
-    #     "gender": data['genderName']
-    # }
-    # userJson = json.dumps(user)
-    # return userJson
     try:
         data = request.json.get('data')
         # hashed=bcrypt.hashpw(password_h,bcrypt.gensalt())
@@ -206,44 +178,62 @@ def create_user():
             "dob": data['dob'],
             "gender": data['genderName']
         }
-        # return jsonify({'name': 'sofia', 'email': 'sofia@gmail.com'})
-
-        # return Response(
-        #     response=json.dumps(
-        #         {"results": "User successfully registered",
-        #          "user": user}),
-        #     status=200,
-        #     mimetype="application/json"
-        # )
-        print("hello")
         if user["password_hash"] == "" or user["first name"] == "" or user["last name"] == "" or user["email"] == "":
-            return Response(
+            response = Response(
                 response=json.dumps(
                     {"message": "Enter the details correctly!!"}),
                 status=400,
                 mimetype="application/json"
             )
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add(
+                'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+            response.headers.add(
+                'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+            return response
         for us in db.users.find():
             print(us['email'])
             if us['email'] == user["email"]:
-                return Response(
+                response = Response(
                     response=json.dumps(
                         {"message": "user already exists,login instead"}),
                     status=401,
                     mimetype="application/json"
                 )
+                response.headers.add('Access-Control-Allow-Origin', '*')
+                response.headers.add(
+                    'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+                response.headers.add(
+                    'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+                return response
         user["password_hash"] = getHashed(user["password_hash"])
         print(user["password_hash"])
         dbResponse = db.users.insert_one(user)
-        return Response(
+        response = Response(
             response=json.dumps(
                 {"message": "user registered", "id": f"{dbResponse.inserted_id}"}),
             status=200,
             mimetype="application/json"
         )
-
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add(
+            'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        response.headers.add(
+            'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response
     except Exception as ex:
         print(ex)
+        response = Response(
+            response=json.dumps({"message": "cannot create user"}),
+            status=500,
+            mimetype="application/json"
+        )
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add(
+            'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        response.headers.add(
+            'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response
 
 
 @app.route("/users/<id>", methods=["PUT"])
