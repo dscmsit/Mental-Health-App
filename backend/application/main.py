@@ -70,7 +70,7 @@ def doctor():
 def get_users(id):
     try:
         # print("wow")
-        data = db.user.findOne({"_id": ObjectId(id)})
+        data = db.user.find_one({"_id": ObjectId(id)})
         response = Response(
             response=json.dumps(data),
             status=200,
@@ -117,7 +117,7 @@ def login_user():
                 mimetype="application/json"
             )
 
-        us = db.user.findOne({"email": user["email"]})
+        us = db.user.find_one({"email": user["email"]})
         # print(us)
         if us:
             if us["password"] == user["password_rec"]:
@@ -199,23 +199,21 @@ def create_user():
             response.headers.add(
                 'Access-Control-Allow-Headers', 'Content-Type, Authorization')
             return response
-        for us in db.users.find():
-            print(us['email'])
-            if us['email'] == user["email"]:
-                response = Response(
-                    response=json.dumps(
-                        {"message": "user already exists,login instead"}),
-                    status=401,
-                    mimetype="application/json"
-                )
-                response.headers.add('Access-Control-Allow-Origin', '*')
-                response.headers.add(
-                    'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-                response.headers.add(
-                    'Access-Control-Allow-Headers', 'Content-Type, Authorization')
-                return response
+        us = db.users.find_one({"email": user["email"]})
+        if us:
+            response = Response(
+                response=json.dumps(
+                    {"message": "user already exists,login instead"}),
+                status=401,
+                mimetype="application/json"
+            )
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add(
+                'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+            response.headers.add(
+                'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+            return response
         user["password_hash"] = getHashed(user["password_hash"])
-        print(user["password_hash"])
         dbResponse = db.users.insert_one(user)
         response = Response(
             response=json.dumps(
