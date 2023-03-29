@@ -38,7 +38,7 @@ def predict():
         if (len(to_predict_list) == 13):
             result = ValuePredictor(to_predict_list, 13)
 
-    if (result > 0.7):
+    if (result > 0.5):
         prediction = {"status": "Good", "result": result*100}
     else:
         prediction = {"status": "Bad", "result": result*100}
@@ -184,7 +184,8 @@ def create_user():
             "email": data['email'],
             "password_hash": data['password'],
             "dob": data['dob'],
-            "gender": data['genderName']
+            "gender": data['genderName'],
+            "state": data['stateName'],
         }
         if user["password_hash"] == "" or user["first name"] == "" or user["last name"] == "" or user["email"] == "":
             response = Response(
