@@ -17,27 +17,12 @@ def hello_world():
 # ________________________________ ML MODEL ROUTES _____________
 
 
-@app.route('/api_post', methods=['POST'])
-def process_json():
-    data = request.get_json()
-    # process the JSON data to obtain an integer value
-    result = data['header'] + data['body']  # for example, add two values
-    return jsonify(result=result)
-
-
-# @app.route("/")
-
-# @app.route("/Heart")
-
-# def cancer():
-#     return render_template("form.html")
-
 def ValuePredictor(to_predict_list, size):
     to_predict = np.array(to_predict_list).astype(np.float16)
     to_predict[0] = to_predict[0]/100
     to_predict = to_predict[np.newaxis, :]
     if (size == 13):
-        loaded_model = tf.keras.models.load_model('model/model3.h5')
+        loaded_model = tf.keras.models.load_model('../model/model3.h5')
         result = loaded_model.predict(to_predict)
     return result[0][0]
 
@@ -72,37 +57,44 @@ def predict():
 
 @app.route("/fetch_doc")
 def doctor():
-    try:
-        res = fetch_req("Chandigarh")
-        return res
-    except:
-        return "not working"
+    res = fetch_req("Chandigarh")
+    return res
+    # return "not working"
 
 
 # db = client.test
 
 
 # get users api
-@app.route("/get_user", methods=["GET"])
-def get_users():
+@app.route("/get_user/<id>", methods=["GET"])
+def get_users(id):
     try:
         # print("wow")
-        data = list(db.users.find())
-        for d in data:
-            d["_id"] = str(d["_id"])
-
-        return Response(
+        data = db.user.findOne({"_id": ObjectId(id)})
+        response = Response(
             response=json.dumps(data),
             status=200,
             mimetype="application/json"
         )
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add(
+            'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        response.headers.add(
+            'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response
     except Exception as ex:
         print(ex)
-        return Response(
+        response = Response(
             response=json.dumps({"message": "cannot read user"}),
             status=500,
             mimetype="application/json"
         )
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add(
+            'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        response.headers.add(
+            'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response
 
 
 # login api
@@ -125,31 +117,47 @@ def login_user():
                 mimetype="application/json"
             )
 
-        us = list(db.users.find())
+        us = db.user.findOne({"email": user["email"]})
         # print(us)
-        for acc in us:
-            print(acc["email"])
-            if user["email"] == acc["email"] and user["password_rec"] == acc["password_hash"]:
-                return Response(
+        if us:
+            if us["password"] == user["password_rec"]:
+                response = Response(
                     response=json.dumps(
-                        {"message": "User successfully logged in"}),
+                        {"status": "true", "message": "User successfully logged in", "id": str(us["_id"])}),
                     status=200,
                     mimetype="application/json"
                 )
-        return Response(
+                response.headers.add('Access-Control-Allow-Origin', '*')
+                response.headers.add(
+                    'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+                response.headers.add(
+                    'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+                return response
+        response = Response(
             response=json.dumps(
                 {"message": "User does not exist, register instead"}),
             status=401,
             mimetype="application/json"
         )
-
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add(
+            'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        response.headers.add(
+            'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response
     except Exception as ex:
         print(ex)
-        return Response(
+        response = Response(
             response=json.dumps({"message": "cannot read user"}),
             status=500,
             mimetype="application/json"
         )
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add(
+            'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        response.headers.add(
+            'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response
 
 
 # function for hashing password
@@ -211,7 +219,7 @@ def create_user():
         dbResponse = db.users.insert_one(user)
         response = Response(
             response=json.dumps(
-                {"message": "user registered", "id": f"{dbResponse.inserted_id}"}),
+                {"status": "true", "message": "user registered", "id": f"{dbResponse.inserted_id}"}),
             status=200,
             mimetype="application/json"
         )
@@ -234,29 +242,3 @@ def create_user():
         response.headers.add(
             'Access-Control-Allow-Headers', 'Content-Type, Authorization')
         return response
-
-
-@app.route("/users/<id>", methods=["PUT"])
-def update_user(id):
-    data = request.json.get('data')
-    try:
-        hashed = data["password"]
-        hashed = getHashed(hashed)
-        dbResponse = db.users.update_one(
-            {"_id": ObjectId(id)},
-            {"$set": {"password_hash": hashed}}
-        )
-        return Response(
-            response=json.dumps({"message": "user updated"}),
-            status=200,
-            mimetype="application/json"
-        )
-    except Exception as ex:
-
-        print(ex)
-
-        return Response(
-            response=json.dumps({"message": "cannot update user"}),
-            status=500,
-            mimetype="application/json"
-        )
