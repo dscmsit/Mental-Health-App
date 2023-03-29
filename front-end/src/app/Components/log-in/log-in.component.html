@@ -2,21 +2,23 @@
   class="p-8 mt-20 mx-auto drop-shadow-2xl h-auto w-96 border-4 bg-white rounded-xl"
 >
   <h1 class="text-black font-bold p-2 text-center text-3xl">Log in</h1>
-
-  <form class="flex flex-col text-lg">
+  <form class="flex flex-col text-lg"[formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="bg-white p-4 flex flex-col">
       <div class="flex flex-col">
         <label class="m-1">Email </label>
         <input
           class="border-2 m-1 p-1 border-black-900"
           type="text"
+          name="email"
+          formControlName="email"
           placeholder="johndoe@email.com"
         /><br />
-
         <label class="m-1">Password </label>
         <input
           class="border-2 m-1 border-black-900 p-1"
           type="password"
+          name="password"
+          formControlName="password"
           placeholder="Enter password"
         />
       </div>

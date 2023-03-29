@@ -15,6 +15,8 @@ export class SignUpComponent implements OnInit {
   Gender: any = ['Male', 'Female', 'Others'];
 
   constructor(public fb: FormBuilder, private http: HttpClient) {}
+
+
   registrationForm = this.fb.group({
     stateName: ['', [Validators.required]],
     genderName: ['', [Validators.required]],
@@ -71,14 +73,23 @@ export class SignUpComponent implements OnInit {
       // continue
       alert('passwords do not match');
     }
-    console.warn(this.registrationForm.value)
-    const data = JSON.stringify(this.registrationForm.value);
+    const stringData = JSON.stringify(this.registrationForm.value); // data is a string you have to convert to json object
+    const data = JSON.parse(stringData); // data is now a JS object
 
-    // console.warn(data);
+    const userData = {
+      header: 'register',
+      data: data,
+    };
+
     this.http
-      .post<any>('https://mentalhealthbackend.onrender.com/register', data)
+      .post('https://mentalhealthbackend.onrender.com/register', userData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       .subscribe((result) => {
         console.log(result);
       });
+      console.log("this is after fetch");
   }
 }
