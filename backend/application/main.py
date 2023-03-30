@@ -38,7 +38,7 @@ def predict():
         if (len(to_predict_list) == 13):
             result = ValuePredictor(to_predict_list, 13)
 
-    if (result > 0.7):
+    if (result > 0.5):
         prediction = {"status": "Good", "result": result*100}
     else:
         prediction = {"status": "Bad", "result": result*100}
@@ -70,7 +70,7 @@ def doctor():
 def get_users(id):
     try:
         # print("wow")
-        data = db.user.findOne({"_id": ObjectId(id)})
+        data = db.users.find_one({"_id": ObjectId(id)})
         response = Response(
             response=json.dumps(data),
             status=200,
@@ -117,13 +117,13 @@ def login_user():
                 mimetype="application/json"
             )
 
-        us = db.user.findOne({"email": user["email"]})
-        # print(us)
+        us = db.users.find_one({"email": user["email"]})
         if us:
-            if us["password"] == user["password_rec"]:
+            print(us)
+            if us["password_hash"] == user["password_rec"]:
                 response = Response(
                     response=json.dumps(
-                        {"status": "true", "message": "User successfully logged in", "id": str(us["_id"])}),
+                        {"status": "true", "message": "User successfully logged in", "id": f'{str(us["_id"])}'}),
                     status=200,
                     mimetype="application/json"
                 )
@@ -184,7 +184,8 @@ def create_user():
             "email": data['email'],
             "password_hash": data['password'],
             "dob": data['dob'],
-            "gender": data['genderName']
+            "gender": data['genderName'],
+            "state": data['stateName'],
         }
         if user["password_hash"] == "" or user["first name"] == "" or user["last name"] == "" or user["email"] == "":
             response = Response(
@@ -199,23 +200,21 @@ def create_user():
             response.headers.add(
                 'Access-Control-Allow-Headers', 'Content-Type, Authorization')
             return response
-        for us in db.users.find():
-            print(us['email'])
-            if us['email'] == user["email"]:
-                response = Response(
-                    response=json.dumps(
-                        {"message": "user already exists,login instead"}),
-                    status=401,
-                    mimetype="application/json"
-                )
-                response.headers.add('Access-Control-Allow-Origin', '*')
-                response.headers.add(
-                    'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-                response.headers.add(
-                    'Access-Control-Allow-Headers', 'Content-Type, Authorization')
-                return response
+        us = db.users.find_one({"email": user["email"]})
+        if us:
+            response = Response(
+                response=json.dumps(
+                    {"message": "user already exists,login instead"}),
+                status=401,
+                mimetype="application/json"
+            )
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add(
+                'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+            response.headers.add(
+                'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+            return response
         user["password_hash"] = getHashed(user["password_hash"])
-        print(user["password_hash"])
         dbResponse = db.users.insert_one(user)
         response = Response(
             response=json.dumps(

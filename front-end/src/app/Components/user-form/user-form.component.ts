@@ -12,12 +12,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-form.component.css']
 })
 export class UserFormComponent {
+  
+ 
 
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
+  constructor(public fb: FormBuilder, private http: HttpClient, private predict:PredictorService, private router: Router) {
+    if (localStorage.getItem('login_status') ==  null){
+      this.router.navigate(['/sign-in']);
+    }
   }
-
-  constructor(public fb: FormBuilder, private http: HttpClient, private predict:PredictorService, private router: Router) {}
   registrationForm = this.fb.group({
     Age : ['', [Validators.required]],
     Gender : ['', [Validators.required]],
@@ -33,6 +35,7 @@ export class UserFormComponent {
     mental_health_consequence: ['', [Validators.required]],
     coworkers: ['', [Validators.required]],
 
+    
 
   });
   onSubmit(){
@@ -48,7 +51,11 @@ export class UserFormComponent {
     };
 
     this.predict.predictMentalHealth(userData);
-    this.router.navigate(['/result'])
+
+    setTimeout(()=>{
+      this.router.navigate(['/result']);
+
+    },1000);
 
   
   }

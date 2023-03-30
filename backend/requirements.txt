@@ -9,6 +9,7 @@ dnspython==2.3.0
 Flask==2.2.3
 Flask-Cors==3.0.10
 Flask-PyMongo==2.3.0
+bs4==0.0.1
 flatbuffers==23.3.3
 gast==0.4.0
 google-auth==2.16.3
