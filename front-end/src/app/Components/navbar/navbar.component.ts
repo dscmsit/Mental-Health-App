@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  user = localStorage.getItem('login_status'); 
+
+  constructor(){
+    console.log(this.user);
+
+  }
 
 }
