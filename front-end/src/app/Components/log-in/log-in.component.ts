@@ -44,6 +44,8 @@ export class LogInComponent {
         console.log(localStorage.getItem('user_id'));
       });
       console.log("this is after fetch");
-      this.router.navigate(['']);
+      this.router.navigate(['/']);
+      // window.location.reload();
+
   }
 }

@@ -115,6 +115,9 @@ export class SignUpComponent{
         }
         console.log(localStorage.getItem('login_status'));
         console.log(localStorage.getItem('user_id'));
+        
       });
+    // window.location.reload();
+
   }
 }
