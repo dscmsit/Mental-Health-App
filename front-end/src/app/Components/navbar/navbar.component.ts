@@ -9,7 +9,7 @@ export class NavbarComponent {
   user = localStorage.getItem('login_status'); 
 
   constructor(){
-    console.log();
+    console.log(this.user);
 
   }
 
