@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import {PredictorService} from '../../Service/predictor.service'; 
+import { Router } from '@angular/router';
 
 
 
@@ -15,7 +17,7 @@ export class UserFormComponent {
     throw new Error('Method not implemented.');
   }
 
-  constructor(public fb: FormBuilder, private http: HttpClient) {}
+  constructor(public fb: FormBuilder, private http: HttpClient, private predict:PredictorService, private router: Router) {}
   registrationForm = this.fb.group({
     Age : ['', [Validators.required]],
     Gender : ['', [Validators.required]],
@@ -45,14 +47,9 @@ export class UserFormComponent {
       data: data,
     };
 
-    this.http
-      .post('https://mentalhealthbackend.onrender.com/predict', userData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .subscribe((result) => {
-        console.log(result);
-      }); 
+    this.predict.predictMentalHealth(userData);
+    this.router.navigate(['/result'])
+
+  
   }
 }
