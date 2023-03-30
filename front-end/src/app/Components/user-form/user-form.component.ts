@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -10,12 +10,12 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./user-form.component.css']
 })
 export class UserFormComponent {
-
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
+  
+  constructor(public fb: FormBuilder, private router:Router, private http: HttpClient) {
+    if (localStorage.getItem('login_status') ==  null){
+      this.router.navigate(['/sign-in']);
+    }
   }
-
-  constructor(public fb: FormBuilder, private http: HttpClient) {}
   registrationForm = this.fb.group({
     Age : ['', [Validators.required]],
     Gender : ['', [Validators.required]],

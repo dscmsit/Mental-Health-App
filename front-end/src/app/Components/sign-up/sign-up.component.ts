@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 
@@ -7,7 +7,7 @@ import { FormBuilder, Validators } from '@angular/forms';
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css'],
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent{
   // constructor(private http:HttpClient){}
   // ngOnInit(): void {
   //   throw new Error('Method not implemented.');
@@ -31,9 +31,6 @@ export class SignUpComponent implements OnInit {
   //   }
 
   // }
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
 
   Gender: any = ['Male', 'Female', 'Others'];
 
@@ -86,6 +83,7 @@ export class SignUpComponent implements OnInit {
   get stateName(){
     return this.registrationForm.get('stateName')
   }
+  res:any;
   onSubmit() {
     // console.warn(this.registrationForm.);
     if (
@@ -110,7 +108,13 @@ export class SignUpComponent implements OnInit {
         },
       })
       .subscribe((result) => {
-        console.log(result);
+        this.res = result;
+        if(this.res.status == "true"){
+          localStorage.setItem('login_status','true');
+          localStorage.setItem('user_id',this.res.id);
+        }
+        console.log(localStorage.getItem('login_status'));
+        console.log(localStorage.getItem('user_id'));
       });
   }
 }
