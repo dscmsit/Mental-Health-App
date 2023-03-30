@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Button } from '@material-ui/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-log-in',
@@ -9,7 +11,7 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./log-in.component.css']
 })
 export class LogInComponent {
-  constructor(public fb: FormBuilder, private http: HttpClient) {}
+  constructor(public fb: FormBuilder, private http: HttpClient, private router:Router) {}
   
   loginForm = this.fb.group({
     email:['', [Validators.required]],
@@ -42,5 +44,6 @@ export class LogInComponent {
         console.log(localStorage.getItem('user_id'));
       });
       console.log("this is after fetch");
+      this.router.navigate(['']);
   }
 }
