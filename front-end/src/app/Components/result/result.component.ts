@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { DoctorCardComponent } from '../doctor-card/doctor-card.component';
 import {PredictorService} from '../../Service/predictor.service'
+import { HttpClient } from '@angular/common/http';
+
 
 
 @Component({
@@ -10,10 +12,27 @@ import {PredictorService} from '../../Service/predictor.service'
 })
 export class ResultComponent {
   result={}; 
-constructor(private predictor:PredictorService){
-  this.result = predictor.fetchedResult;
-console.log(this.result);
+  data={};
+  ngOnInit(){
+    console.log("Before api call"); 
+    this.http.get('https://mentalhealthbackend.onrender.com/fetch_doc', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .subscribe((result) => {
+      console.log(result);
+      this.data = result;
+      console.log(this.data);
+    }); 
+    console.log("After api call"); 
 
+  }
+constructor(private predictor:PredictorService, private http:HttpClient){
+  this.result = predictor.fetchedResult;
+// console.log(this.result);
 
 }
+
+
 }
