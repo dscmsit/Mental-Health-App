@@ -5,17 +5,26 @@
   [radius]="100"
   [outerStrokeWidth]="16"
   [innerStrokeWidth]="8"
-  [outerStrokeColor]="'#78C000'"
-  [innerStrokeColor]="'#C7E596'"
+  [outerStrokeColor]="'#38bdf8'"
+  [innerStrokeColor]="'#a5b4fc'"
   [animation]="true"
   [animationDuration]="300"
 ></circle-progress>
-   <div *ngFor="let card of cards">
+
+<h1 class="text-center font-bold text-3xl m-8">Here is a list of therapist you can contact for your we'll being</h1>
+   <div *ngFor="let card of cards; let i=index" 
+   [ngStyle]="{background:i%2===0?'#38bdf8':'#a5b4fc'}"
+   class="w-4/5 m-2 rounded-xl shadow-2xl px-0"
+
+   >
     <app-doctor-card
     [name]="card.name"
     [desc]="card.desc"
     [link]="card.link"
-    ></app-doctor-card>
+    [index]="i"
+    >
+    
+</app-doctor-card>
    
    </div>
 </div>

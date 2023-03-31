@@ -16,7 +16,10 @@ export class DoctorCardComponent implements OnInit {
   @Input()
   desc!: String; 
   @Input()
-  link!: String; 
+  link!: String;
+  
+  @Input()
+  index!: Number;
 
   ngOnInit(): void {
     // throw new Error('Method not implemented.');

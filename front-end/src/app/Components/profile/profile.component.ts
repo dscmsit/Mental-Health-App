@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit{
         console.warn(result);
         console.warn("hello user")
         this.data=result
-        console.warn(this.data)
+        console.warn(this.data.state)
         
       })
   }

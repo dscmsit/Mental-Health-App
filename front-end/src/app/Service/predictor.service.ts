@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class PredictorService {
-fetchedResult={};
+fetchedResult:any;
   constructor(private http: HttpClient) {
 
    }
@@ -18,8 +18,11 @@ fetchedResult={};
     })
     .subscribe((result) => {
       console.log(result);
-      this.fetchedResult = result;
-      // console.log(this.fetchedResult.?result)
+      // this.fetchedResult = result;
+      localStorage.setItem('result',JSON.stringify(result));
+      this.fetchedResult = localStorage.getItem('result'); 
+      this.fetchedResult = JSON.parse(this.fetchedResult);
+      // console.log(this.fetchedResult.result)
     }); 
   }
 }
