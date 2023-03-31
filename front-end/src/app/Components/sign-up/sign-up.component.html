@@ -2,14 +2,18 @@
   class="p-8 mx-auto my-20 drop-shadow-2xl h-auto w-96 border-4 bg-white rounded-lg"
 >
   <h2 class="text-black font-bold p-2 text-center text-3xl">Sign Up</h2>
-  <form class="flex flex-col text-lg" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <form
+    class="flex flex-col text-lg"
+    [formGroup]="registrationForm"
+    (ngSubmit)="onSubmit()"
+  >
     <div class="bg-white p-4 flex flex-col">
       <label class="m-1">First Name </label>
       <input
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Ex. John"
         type="text"
-        name="first name" 
+        name="first name"
         formControlName="first_name"
         required
       /><br />
@@ -18,7 +22,7 @@
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Ex. Doe"
         type="text"
-        name="last name" 
+        name="last name"
         formControlName="last_name"
         required
       /><br />
@@ -27,7 +31,7 @@
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Ex. johndoe@email.com"
         type="email"
-        name="email" 
+        name="email"
         formControlName="email"
         required
       /><br />
@@ -36,7 +40,7 @@
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Enter a password"
         type="password"
-        name="password" 
+        name="password"
         formControlName="password"
         required
       /><br />
@@ -45,7 +49,7 @@
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Confirm password"
         type="password"
-        name="confirm_pass" 
+        name="confirm_pass"
         formControlName="confirm_pass"
         required
       /><br />
@@ -54,7 +58,7 @@
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Date of Birth"
         type="date"
-        name="dob" 
+        name="dob"
         formControlName="dob"
         required
       /><br />
@@ -75,25 +79,26 @@
         <input type="radio" name="gender" id="Others"  />
       </div> -->
       <label class="m-1"> Gender </label>
-      <select 
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group" 
+      <select
+        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
         (change)="changeGender($event)"
         formControlName="genderName"
-        
       >
         <option name="select">select</option>
         <option name="male">Male</option>
         <option name="female">Female</option>
-        <option name="others" >Others</option></select
+        <option name="others">Others</option></select
       ><br />
       <label class="m-1"> Your State </label>
-      <select 
-        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group" 
+      <select
+        class="text-black bg-white w-32 m-1 p-1 text-lg font-medium rounded hover:bg-white hover:text-black border-2 hover:border-2 hover:border-black group"
         (change)="changeState($event)"
         formControlName="stateName"
       >
         <option value="Andhra-Pradesh">Andhra Pradesh</option>
-        <option value="Andaman-and-Nicobar-Islands">Andaman and Nicobar Islands</option>
+        <option value="Andaman-and-Nicobar-Islands">
+          Andaman and Nicobar Islands
+        </option>
         <option value="Arunachal-Pradesh">Arunachal Pradesh</option>
         <option value="Assam">Assam</option>
         <option value="Bihar">Bihar</option>
@@ -129,7 +134,6 @@
         <option value="Uttarakhand">Uttarakhand</option>
         <option value="West-Bengal">West Bengal</option></select
       ><br />
-
     </div>
     <button
       type="submit"
@@ -143,10 +147,6 @@
     <a class="text-black" routerLink="sign-in"><u>Sign In</u></a>
   </p>
 </div>
-
-
-
-
 
 <!-- card start -->
 

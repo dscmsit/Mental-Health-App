@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DoctorCardComponent } from '../doctor-card/doctor-card.component';
-import {PredictorService} from '../../Service/predictor.service'
+import { PredictorService } from '../../Service/predictor.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-result',
   templateUrl: './result.component.html',
-  styleUrls: ['./result.component.css']
+  styleUrls: ['./result.component.css'],
 })
 export class ResultComponent{
   cards:any;
@@ -31,7 +31,7 @@ export class ResultComponent{
     }); 
     console.log("After api call"); 
   }
-  result={}; 
-
-
+  constructor(private predictor: PredictorService, private http: HttpClient) {
+    this.result = predictor.fetchedResult;
+  }
 }
