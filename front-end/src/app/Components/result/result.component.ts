@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class ResultComponent{
   cards:any;
+  result:any;
   constructor(private predictor:PredictorService, private http:HttpClient, private router: Router){
     if (localStorage.getItem('login_status') ==  null){
       this.router.navigate(['/sign-in']);
@@ -30,8 +31,5 @@ export class ResultComponent{
       console.log(this.cards);
     }); 
     console.log("After api call"); 
-  }
-  constructor(private predictor: PredictorService, private http: HttpClient) {
-    this.result = predictor.fetchedResult;
   }
 }
