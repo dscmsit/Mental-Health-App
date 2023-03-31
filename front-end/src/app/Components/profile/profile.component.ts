@@ -12,11 +12,14 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit{
   constructor(private http:HttpClient, private router:Router){}
 
+  data:any
+
   ngOnInit(): void {
       const id=localStorage.getItem('user_id')
       console.warn(id)
       this.http.get(`https://mentalhealthbackend.onrender.com/get_user/${id}`).subscribe((result)=>{
         console.warn(result);
+        this.data=result
       })
   }
 
