@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ResultComponent {
   result={}; 
-  data={};
+  cards:any;
   ngOnInit(){
     console.log("Before api call"); 
     this.http.get('https://mentalhealthbackend.onrender.com/fetch_doc', {
@@ -22,8 +22,8 @@ export class ResultComponent {
     })
     .subscribe((result) => {
       console.log(result);
-      this.data = result;
-      console.log(this.data);
+      this.cards = result;
+      console.log(this.cards);
     }); 
     console.log("After api call"); 
 

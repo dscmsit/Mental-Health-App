@@ -10,6 +10,12 @@
   [animation]="true"
   [animationDuration]="300"
 ></circle-progress>
-    <app-doctor-card></app-doctor-card>
-    
+   <div *ngFor="let card of cards">
+    <app-doctor-card
+    [name]="card.name"
+    [desc]="card.desc"
+    [link]="card.link"
+    ></app-doctor-card>
+   
+   </div>
 </div>
