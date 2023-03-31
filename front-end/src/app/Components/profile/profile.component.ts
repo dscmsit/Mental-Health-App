@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit{
       // console.warn(id)
       
       this.http.get(`https://mentalhealthbackend.onrender.com/get_user/${id}`).subscribe((result)=>{
-        console.warn(result);
+        // console.warn(result);
         // console.warn("hello user")
         this.data=result
         // console.warn(this.data.state)

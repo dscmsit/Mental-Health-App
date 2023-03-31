@@ -23,7 +23,7 @@ export class ResultComponent{
      this.result = predictor.fetchedResult;
     // this.result = JSON.parse(this.result);
 
-    console.log(this.result);
+    // console.log(this.result);
     // console.log("Before api call"); 
    
     // console.log("After api call"); 
