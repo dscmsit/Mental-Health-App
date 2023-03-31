@@ -19,6 +19,7 @@ fetchedResult={};
     .subscribe((result) => {
       console.log(result);
       this.fetchedResult = result;
+      // console.log(this.fetchedResult.?result)
     }); 
   }
 }

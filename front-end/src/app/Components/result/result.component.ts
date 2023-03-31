@@ -11,16 +11,26 @@ import { Router } from '@angular/router';
 })
 export class ResultComponent{
   cards:any;
-  result:any;
+  result=0;
+  
   constructor(private predictor:PredictorService, private http:HttpClient, private router: Router){
-    if (localStorage.getItem('login_status') ==  null){
+   
+    // this.result = predictor.fetchedResult.result;
+
+    // console.log(this.result);
+    // console.log("Before api call"); 
+   
+    // console.log("After api call"); 
+    // console.log(predictor.fetchedResult);
+  }
+
+  ngOnInit(): void {
+    if (localStorage.getItem('login_status') === null){
       this.router.navigate(['/sign-in']);
     }
 
-    this.result = predictor.fetchedResult;
-    // console.log(this.result);
-    console.log("Before api call"); 
-    this.http.get('https://mentalhealthbackend.onrender.com/fetch_doc', {
+
+    this.http.get('https://mentalhealthbackend.onrender.com/fetch_doc/delhi', {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -29,7 +39,8 @@ export class ResultComponent{
       console.log(result);
       this.cards = result; 
       console.log(this.cards);
+
     }); 
-    console.log("After api call"); 
+    // throw new Error('Method not implemented.');
   }
 }

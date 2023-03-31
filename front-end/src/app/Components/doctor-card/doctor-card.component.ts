@@ -19,6 +19,6 @@ export class DoctorCardComponent implements OnInit {
   link!: String; 
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 }
