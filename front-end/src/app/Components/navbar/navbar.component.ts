@@ -13,8 +13,8 @@ export class NavbarComponent implements OnInit{
   constructor(){
     this.user = localStorage.getItem('login_status');
     this.id=localStorage.getItem('user_id')
-    console.log(this.user);
-    console.log(this.id)
+    // console.log(this.user);
+    // console.log(this.id)
     // this.ngOnInit()
   }
   ngOnInit(): void {
