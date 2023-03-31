@@ -10,9 +10,16 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './result.component.html',
   styleUrls: ['./result.component.css']
 })
+
+export interface Card {
+ name:String;
+ desc:String; 
+ link:String;
+}
+
 export class ResultComponent {
   result={}; 
-  cards:any;
+  cards:Card[];
   ngOnInit(){
     console.log("Before api call"); 
     this.http.get('https://mentalhealthbackend.onrender.com/fetch_doc', {
