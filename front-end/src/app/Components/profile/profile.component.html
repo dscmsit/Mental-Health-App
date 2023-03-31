@@ -8,7 +8,7 @@
   <div class="flex flex-col text-lg" ><!--#userPost="ngForm"-->
     <div class="bg-white p-4 flex ">
       <label class="m-1">First Name:  </label>
-      <label class="m-1">__name__</label>
+      <label class="m-1">{{data["first name"]}}</label>
       <!-- <input
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Ex. John"
@@ -22,7 +22,7 @@
 
       <div class="bg-white p-4 flex ">
       <label class="m-1">Last Name: </label>
-      <label class="m-1">__name__ </label>
+      <label class="m-1">{{data["last name"]}}</label>
       <!-- <input
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Ex. Doe"
@@ -36,7 +36,7 @@
 
       <div class="bg-white p-4 flex ">
       <label class="m-1 ">Email: </label>
-      <label class="m-1 ">__Email__ </label>
+      <label class="m-1 ">{{data.email}} </label>
       <!-- <input
         class="border-2 m-1 p-1 border-black-900 ml-11"
         placeholder="Ex. johndoe@email.com"
@@ -49,7 +49,7 @@
 
       <div class="bg-white p-4 flex ">
       <label class="m-1">DOB: </label>
-      <label class="m-1">__DOB__</label>
+      <label class="m-1">{{data.dob}}</label>
       <!-- <input
       class="border-2 m-1 p-1 border-black-900 ml-12"
       placeholder="Ex. 01/01/2000"
@@ -62,7 +62,7 @@
 
       <div class="bg-white p-4 flex ">
       <label>Gender: </label>
-      <label>__Gender__</label>
+      <label>{{data.gender}}</label>
       <!-- <input
       class="border-2 m-1 p-1 border-black-900 ml-8"
       placeholder="Ex. male"
