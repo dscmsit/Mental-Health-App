@@ -12,7 +12,7 @@ import { config } from 'rxjs';
 })
 export class ResultComponent{
   cards:any;
-  result:any;
+  result=0;
   data:any;
   state="delhi";
    id=localStorage.getItem('user_id')
@@ -21,7 +21,7 @@ export class ResultComponent{
   constructor(private predictor:PredictorService, private http:HttpClient, private router: Router){
    
      this.result = predictor.fetchedResult;
-    this.result = JSON.parse(this.result);
+    // this.result = JSON.parse(this.result);
 
     console.log(this.result);
     // console.log("Before api call"); 
