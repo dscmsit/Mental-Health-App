@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -34,7 +35,7 @@ export class SignUpComponent{
 
   Gender: any = ['Male', 'Female', 'Others'];
 
-  constructor(public fb: FormBuilder, private http: HttpClient) {}
+  constructor(public fb: FormBuilder, private http: HttpClient,  private router:Router) {}
   registrationForm = this.fb.group({
     stateName: ['', [Validators.required]],
     genderName: ['', [Validators.required]],
@@ -112,6 +113,11 @@ export class SignUpComponent{
         if(this.res.status == "true"){
           localStorage.setItem('login_status','true');
           localStorage.setItem('user_id',this.res.id);
+          this.router.navigate(['/']); 
+          setTimeout(()=>{
+            window.location.reload();
+       
+           },1000)
         }
         console.log(localStorage.getItem('login_status'));
         console.log(localStorage.getItem('user_id'));

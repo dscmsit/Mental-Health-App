@@ -36,15 +36,27 @@ export class LogInComponent {
       })
       .subscribe((result) => {
         this.res = result;
+        console.log(result);
         if(this.res.status == "true"){
           localStorage.setItem('login_status','true');
           localStorage.setItem('user_id',this.res.id);
+          this.router.navigate(['/']); 
+          setTimeout(()=>{
+            window.location.reload();
+       
+           },1000)
+          
         }
         console.log(localStorage.getItem('login_status'));
         console.log(localStorage.getItem('user_id'));
       });
       console.log("this is after fetch");
-      this.router.navigate(['/']);
+        
+
+      // this.router.navigateByUrl('/profile', { skipLocationChange: true }).then(()=>{
+      //   this.router.navigate(["/"]);
+      // });
+      
       // window.location.reload();
 
   }
