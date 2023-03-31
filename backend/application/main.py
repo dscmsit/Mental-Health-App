@@ -55,22 +55,22 @@ def predict():
 
 # _______________________________ SCRAPPING ROUTES ____________________
 
-@app.route("/fetch_doc")
-def doctor():
-    res = fetch_req("Chandigarh")
-    return res
-    # return "not working"
-
-
-# db = client.test
+@app.route("/fetch_doc/<name>")
+def doctor(name):
+    try:
+        res = fetch_req(name)
+        return res
+    except Exception as ex:
+        print(ex)
+        return "not working"
 
 
 # get users api
 @app.route("/get_user/<id>", methods=["GET"])
 def get_users(id):
     try:
-        # print("wow")
         data = db.users.find_one({"_id": ObjectId(id)})
+        data["_id"] = str(data["_id"])
         response = Response(
             response=json.dumps(data),
             status=200,
@@ -110,12 +110,18 @@ def login_user():
         }
         user["password_rec"] = getHashed(user["password_rec"])
         if user["email"] == "" or user["password_rec"] == "":
-            return Response(
+            response = Response(
                 response=json.dumps(
                     {"message": "Enter the details correctly!!"}),
                 status=400,
                 mimetype="application/json"
             )
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add(
+                'Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+            response.headers.add(
+                'Access-Control-Allow-Headers', 'Content-Type, Authorization')
+            return response
 
         us = db.users.find_one({"email": user["email"]})
         if us:
