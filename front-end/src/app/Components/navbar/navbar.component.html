@@ -1,7 +1,7 @@
 <div class="py-5 px-2 bg-[#222831] text-white text-bold flex items-center">
   <span class="text-2xl ml-8"><a routerLink="">Mental Health</a></span>
 
-  <div *ngIf="!user" class="nav-buttons mr-8">
+  <div *ngIf="!user; else elseBlock" class="nav-buttons mr-8">
     <button routerLink="sign-in"
       class="bg-white text-black text-lg py-1 px-3 m-1 rounded-md hover:border-white hover:bg-black hover:text-white transition-all ease-in-out"
     >
@@ -13,9 +13,11 @@
       Sign Up
     </button>
   </div>
-  <div class="ml-auto px-4" *ngIf="user">
+  <ng-template  #elseBlock>
+    <div class="ml-auto px-4">
     <button routerLink="profile" class="cursor-pointer space">
     <img class="h-12 w-auto" src="../../../assets/img_364496.png" alt="profile.png"/>
     </button>
   </div>
+  </ng-template>
 </div>
