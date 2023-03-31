@@ -1,15 +1,14 @@
+
 <div
   class="p-8 mx-auto my-20 drop-shadow-2xl h-auto w-2/6 border-4 bg-white rounded-lg"
->
-  <div class="flex justify-center">
-    <img class="h-12 w-auto mr-4" src="../../../assets/img_364496.png" />
-    <h2 class="text-black font-bold p-2 text-center text-3xl">Profile</h2>
+><div class="flex justify-center">
+  <h2 class="text-black font-bold p-2 text-center text-3xl ">Profile</h2>
+  <img class="h-12 w-auto" src="../../../assets/img_364496.png"/>
   </div>
-  <div class="flex flex-col text-lg">
-    <!--#userPost="ngForm"-->
-    <div class="bg-white p-4 flex">
-      <label class="m-1">First Name: </label>
-      <label class="m-1">{{ data["first name"] }}</label>
+  <div class="flex flex-col text-lg" ><!--#userPost="ngForm"-->
+    <div class="bg-white p-4 flex ">
+      <label class="m-1">First Name:  </label>
+      <label class="m-1">{{data["first name"]}}</label>
       <!-- <input
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Ex. John"
@@ -18,11 +17,12 @@
         ngModel
         disabled
       /><br /> -->
-    </div>
+      </div>
 
-    <div class="bg-white p-4 flex">
+
+      <div class="bg-white p-4 flex ">
       <label class="m-1">Last Name: </label>
-      <label class="m-1">{{ data["last name"] }}</label>
+      <label class="m-1">{{data["last name"]}}</label>
       <!-- <input
         class="border-2 m-1 p-1 border-black-900"
         placeholder="Ex. Doe"
@@ -33,9 +33,10 @@
       /><br /> -->
     </div>
 
-    <div class="bg-white p-4 flex">
-      <label class="m-1">Email: </label>
-      <label class="m-1">{{ data.email }} </label>
+
+      <div class="bg-white p-4 flex ">
+      <label class="m-1 ">Email: </label>
+      <label class="m-1 ">{{data.email}} </label>
       <!-- <input
         class="border-2 m-1 p-1 border-black-900 ml-11"
         placeholder="Ex. johndoe@email.com"
@@ -46,9 +47,9 @@
       /><br /> -->
     </div>
 
-    <div class="bg-white p-4 flex">
+      <div class="bg-white p-4 flex ">
       <label class="m-1">DOB: </label>
-      <label class="m-1">{{ data.dob }}</label>
+      <label class="m-1">{{data.dob}}</label>
       <!-- <input
       class="border-2 m-1 p-1 border-black-900 ml-12"
       placeholder="Ex. 01/01/2000"
@@ -59,9 +60,9 @@
     /><br /> -->
     </div>
 
-    <div class="bg-white p-4 flex">
+      <div class="bg-white p-4 flex ">
       <label>Gender: </label>
-      <label>{{ data.gender }}</label>
+      <label>{{data.gender}}</label>
       <!-- <input
       class="border-2 m-1 p-1 border-black-900 ml-8"
       placeholder="Ex. male"
@@ -72,7 +73,7 @@
     /><br /> -->
     </div>
 
-    <div class="bg-white p-4 flex">
+    <div class="bg-white p-4 flex ">
       <label>State: </label>
       <label>{{data.state}}</label>
       <!-- <input
@@ -84,12 +85,13 @@
       disabled
     /><br /> -->
     </div>
-
+    
     <button
       class="text-white border-2 bg-[#222831] w-64 mx-auto py-2 text-xl font-medium rounded m-2 hover:bg-white hover:text-black hover:border-2 hover:border-black transition-all ease-in-out"
       (click)="LogOut()"
     >
-      Log out
+     Log out
     </button>
   </div>
+ 
 </div>
