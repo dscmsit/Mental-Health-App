@@ -55,9 +55,9 @@ def predict():
 
 # _______________________________ SCRAPPING ROUTES ____________________
 
-@app.route("/fetch_doc")
-def doctor():
-    res = fetch_req("Chandigarh")
+@app.route("/fetch_doc/<name>")
+def doctor(name):
+    res = fetch_req(name)
     return res
     # return "not working"
 

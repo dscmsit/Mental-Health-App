@@ -6,7 +6,7 @@ Chandigarh
 delhi
 '''
 def fetch_req(city):       
-    result = {}
+    result = []
     # try:
     import re, json
     import requests
@@ -51,7 +51,7 @@ def fetch_req(city):
                 if desc_find[start:end]:
                     res["desc"] = desc_find[start:end]
 
-                result[str(i)] = res
+                result.append(res)
             else:
                 break
         except:
